@@ -1,0 +1,8 @@
+@import "../general/mixines";
+
+.header {
+  width: 100%;
+  height: 120px;
+  @include flex(row, center, center);
+  background-color: #69f6f9;
+}

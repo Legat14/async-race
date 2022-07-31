@@ -1,0 +1,51 @@
+@import "../general/mixines";
+
+$car-width: 90px;
+$side-panel-width: 200px;
+
+.main {
+  @include all-width-and-height;
+  @include flex(row, space-between, center);
+  flex-grow: 1;
+
+  .control-panel {
+    width: $side-panel-width;
+    height: 100%;
+    background-color: #acae35;
+  }
+
+  .track-area {
+    height: 100%;
+    flex-grow: 1;
+    background-color: #43ae35;
+    
+    
+    .track {
+      width: 100%;
+      height: calc(100% / 7);
+      @include flex(row, flex-start, center);
+      background-color: #9a9a9a;
+      border: 2px solid #ffffff;
+      
+      .track__car-controls {
+        position: relative;
+        left: - $car-width - $side-panel-width;
+        width: 200px;
+        height: 100%;
+        background-color: #f26fee;
+        border: 2px solid #000000;
+      }
+
+      .track__car-div {
+        width: $car-width;
+        height: calc(100% / 7) - 10px;
+        @include flex(column, space-between, center);
+        z-index: 10;
+
+        .car-div__img {
+          width: 100%;
+        }
+      }
+    }
+  }
+}

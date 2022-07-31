@@ -12,9 +12,15 @@ export class Data {
 
   carCreateHeader = { 'Content-Type': 'application/json' };
 
-  async getCars(): Promise<Car[]> {
-    const response: Response = await fetch(this.garageUrl, { method: Requests.GET });
+  async getCars(pageNumber?: number): Promise<Car[]> {
+    const carsOnPage: number = 7;
+    let url = this.garageUrl;
+    if (pageNumber) {
+      url = `${this.garageUrl}?_page=${pageNumber}&_limit=${carsOnPage}`;
+    }
+    const response: Response = await fetch(url, { method: Requests.GET });
     const data: Car[] = await response.json();
+    console.log(data);
     return data;
   }
 
@@ -27,8 +33,11 @@ export class Data {
 
   createCar(name: string, color: string): void { // TODO: Добавить обработку ответа сервера
     const newCar: Car = { name, color };
-    fetch(this.garageUrl, { method: Requests.POST, headers: this.carCreateHeader,
-      body: JSON.stringify(newCar) });
+    fetch(this.garageUrl, {
+      method: Requests.POST,
+      headers: this.carCreateHeader,
+      body: JSON.stringify(newCar),
+    });
     console.log('newCar: ', newCar);
   }
 
@@ -52,14 +61,4 @@ export class Data {
   }
 }
 
-const dataGetter = new Data(); // TODO: Это было добавлено для проверки.
-                    //Теория подтверждается. Нужно получать данные внутри функций.
-
-async function getData() {
-  const cars = await dataGetter.getCars();
-  const car = await dataGetter.getCar(2);
-}
-
-getData();
-
-dataGetter.deleteAllCars();
+export const dataModel = new Data();

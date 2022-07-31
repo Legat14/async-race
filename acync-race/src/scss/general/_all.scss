@@ -1,3 +1,15 @@
+@import "./mixines";
+
 * {
-  background-color: aqua;
+  box-sizing: border-box;
+}
+
+a {
+  cursor: pointer;
+}
+
+body {
+  width: 100vw;
+  height: 100vh;
+  @include flex (column, space-between, center);
 }
