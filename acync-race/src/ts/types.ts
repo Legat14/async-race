@@ -6,3 +6,9 @@ export enum Requests {
   DELETE = 'DELETE',
   OPTIONS = 'OPTIONS'
 }
+
+export type Car = {
+  name: string,
+  color: string,
+  id?: number
+}
