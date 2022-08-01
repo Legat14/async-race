@@ -12,6 +12,23 @@ export class Page {
     const headerControlPanelDiv: HTMLElement = document.createElement('div');
     headerControlPanelDiv.classList.add('header__control-panel');
 
+    const headerCreateCarForm: HTMLFormElement = document.createElement('form');
+    headerCreateCarForm.classList.add('header-control-panel__create-car-form');
+    const carNameInput: HTMLInputElement = document.createElement('input');
+    carNameInput.classList.add('create-car-div__car-name-input');
+    carNameInput.setAttribute('type', 'text');
+    carNameInput.setAttribute('maxlength', '25');
+    carNameInput.setAttribute('minlength', '1');
+    carNameInput.setAttribute('placeholder', 'Enter car name');
+    const carColorInput: HTMLInputElement = document.createElement('input');
+    carColorInput.classList.add('create-car-div__car-color-input');
+    carColorInput.setAttribute('type', 'color');
+    carColorInput.setAttribute('value', '#ffffff');
+    const createCarBtn: HTMLButtonElement = document.createElement('button');
+    createCarBtn.classList.add('create-car-div__create-car-btn');
+    createCarBtn.setAttribute('type', 'button');
+    createCarBtn.innerText = 'Create a car';
+
     const create100RandomCarsBtn: HTMLButtonElement = document.createElement('button');
     create100RandomCarsBtn.classList.add('header-control-panel__create-100-random-cars-btn');
     create100RandomCarsBtn.setAttribute('type', 'button');
@@ -22,7 +39,8 @@ export class Page {
     deleteAllCarsBtn.setAttribute('type', 'button');
     deleteAllCarsBtn.innerText = 'Delete all cars';
 
-    headerControlPanelDiv.append(create100RandomCarsBtn, deleteAllCarsBtn);
+    headerCreateCarForm.append(carNameInput, carColorInput, createCarBtn);
+    headerControlPanelDiv.append(headerCreateCarForm, create100RandomCarsBtn, deleteAllCarsBtn);
     headerDiv.append(headerControlPanelDiv, headerH1);
     document.body.append(headerDiv);
   }

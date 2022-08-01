@@ -13,3 +13,4 @@ page.renderVeiw();
 
 controller.create100RandomCarsEvent();
 controller.deleteAllCarsEvent();
+controller.createCarEvent();
