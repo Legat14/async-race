@@ -1,11 +1,15 @@
 import './scss/main.scss';
-import { dataModel } from './ts/model/mock-data';
+import { Controller } from './ts/controller/controller';
+import { Data } from './ts/model/mock-data';
 
 import './ts/model/mock-data.ts';
 import { Page } from './ts/view/page';
 
-const page = new Page();
-
-dataModel.createRandomCars(7);
+export const dataModel = new Data();
+export const page = new Page();
+const controller = new Controller();
 
 page.renderVeiw();
+
+controller.create100RandomCarsEvent();
+controller.deleteAllCarsEvent();

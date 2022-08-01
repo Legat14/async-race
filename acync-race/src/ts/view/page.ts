@@ -1,4 +1,4 @@
-import { dataModel } from "../model/mock-data";
+import { dataModel } from "../../index";
 import { Car } from "../types";
 
 export class Page {
@@ -8,7 +8,22 @@ export class Page {
     const headerH1: HTMLDivElement = document.createElement('h1');
     headerH1.classList.add('header__h1');
     headerH1.innerHTML = 'Async Race';
-    headerDiv.append(headerH1);
+    
+    const headerControlPanelDiv: HTMLElement = document.createElement('div');
+    headerControlPanelDiv.classList.add('header__control-panel');
+
+    const create100RandomCarsBtn: HTMLButtonElement = document.createElement('button');
+    create100RandomCarsBtn.classList.add('header-control-panel__create-100-random-cars-btn');
+    create100RandomCarsBtn.setAttribute('type', 'button');
+    create100RandomCarsBtn.innerText = 'Create 100 cars';
+
+    const deleteAllCarsBtn: HTMLButtonElement = document.createElement('button');
+    deleteAllCarsBtn.classList.add('header-control-panel__delete-all-cars-btn');
+    deleteAllCarsBtn.setAttribute('type', 'button');
+    deleteAllCarsBtn.innerText = 'Delete all cars';
+
+    headerControlPanelDiv.append(create100RandomCarsBtn, deleteAllCarsBtn);
+    headerDiv.append(headerControlPanelDiv, headerH1);
     document.body.append(headerDiv);
   }
 
@@ -19,7 +34,7 @@ export class Page {
     this.renderControlPanel();
     this.renderTrackArea();
   }
-  
+
   renderControlPanel() {
     const controlPanel: HTMLElement = document.createElement('aside');
     controlPanel.classList.add('control-panel');
@@ -28,7 +43,7 @@ export class Page {
       mainDiv.append(controlPanel);
     }
   }
-  
+
   async renderTrackArea() {
     const trackArea: HTMLElement = document.createElement('div');
     trackArea.classList.add('track-area');
@@ -38,7 +53,7 @@ export class Page {
     }
     this.renderTracks(await dataModel.getCars(1)); // TODO: Сделать механизм, меняющий номера страниц
   }
-  
+
   renderTrack(car: Car) {
     const track: HTMLDivElement = document.createElement('div');
     track.classList.add('track');
@@ -55,7 +70,7 @@ export class Page {
 
     const carControlsDiv: HTMLDivElement = document.createElement('div');
     carControlsDiv.classList.add('track__car-controls');
-    
+
     carDiv.append(carNameH, carImg);
     track.append(carDiv, carControlsDiv);
 
@@ -64,8 +79,16 @@ export class Page {
       trackArea.append(track);
     }
   }
+  
+  cleanTrackArea(): void {
+    const allTracks: NodeListOf<HTMLDivElement> = document.querySelectorAll('.track');
+    allTracks.forEach((track: HTMLDivElement) => {
+      track.remove();
+    });
+  }
 
   renderTracks(carsOnPage: Car[]): void {
+    this.cleanTrackArea();
     carsOnPage.forEach((car): void => {
       this.renderTrack(car);
     });

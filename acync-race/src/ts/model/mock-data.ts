@@ -60,5 +60,3 @@ export class Data {
     });
   }
 }
-
-export const dataModel = new Data();

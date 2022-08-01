@@ -2,7 +2,7 @@
   "name": "online-store",
   "version": "1.0.0",
   "description": "online-store on typescript",
-  "main": "index.js",
+  "main": "bundle.js",
   "scripts": {
     "build": "webpack",
     "lint": "eslint src",
