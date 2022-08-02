@@ -42,10 +42,11 @@ $side-panel-width: 200px;
         @include flex(column, space-between, center);
         z-index: 10;
 
-        .car-div__img {
-          width: 100%;
-        }
       }
     }
   }
+}
+
+.car-div__img {
+  width: 100%;
 }
