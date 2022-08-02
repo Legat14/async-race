@@ -2,6 +2,13 @@ import { dataModel } from "../../index";
 import { Car } from "../types";
 
 export class Page {
+
+  garagePage: number;
+
+  constructor() {
+    this.garagePage = 1;
+  }
+
   renderHeader() {
     const headerDiv: HTMLElement = document.createElement('header');
     headerDiv.classList.add('header');
@@ -9,9 +16,9 @@ export class Page {
     headerH1.classList.add('header__h1');
     headerH1.innerHTML = 'Async Race';
     
-    const headerControlPanelDiv: HTMLElement = document.createElement('div');
+    const headerControlPanelDiv: HTMLDivElement = document.createElement('div');
     headerControlPanelDiv.classList.add('header__control-panel');
-
+    
     const headerCreateCarForm: HTMLFormElement = document.createElement('form');
     headerCreateCarForm.classList.add('header-control-panel__create-car-form');
     const carNameInput: HTMLInputElement = document.createElement('input');
@@ -28,20 +35,34 @@ export class Page {
     createCarBtn.classList.add('create-car-div__create-car-btn');
     createCarBtn.setAttribute('type', 'button');
     createCarBtn.innerText = 'Create a car';
-
+    
     const create100RandomCarsBtn: HTMLButtonElement = document.createElement('button');
     create100RandomCarsBtn.classList.add('header-control-panel__create-100-random-cars-btn');
     create100RandomCarsBtn.setAttribute('type', 'button');
     create100RandomCarsBtn.innerText = 'Create 100 cars';
-
+    
     const deleteAllCarsBtn: HTMLButtonElement = document.createElement('button');
     deleteAllCarsBtn.classList.add('header-control-panel__delete-all-cars-btn');
     deleteAllCarsBtn.setAttribute('type', 'button');
     deleteAllCarsBtn.innerText = 'Delete all cars';
+    
+    const headerNavPanelDiv: HTMLDivElement = document.createElement('div');
+    headerNavPanelDiv.classList.add('header__nav-panel');
+    
+    const paginationForwardBtn: HTMLButtonElement = document.createElement('button');
+    paginationForwardBtn.classList.add('header-nav-panel__pagination-forward-btn');
+    paginationForwardBtn.setAttribute('type', 'button');
+    paginationForwardBtn.innerText = '⇨';
+    
+    const paginationBackwardBtn: HTMLButtonElement = document.createElement('button');
+    paginationBackwardBtn.classList.add('header-nav-panel__pagination-backward-btn');
+    paginationBackwardBtn.setAttribute('type', 'button');
+    paginationBackwardBtn.innerText = '⇦';
 
     headerCreateCarForm.append(carNameInput, carColorInput, createCarBtn);
     headerControlPanelDiv.append(headerCreateCarForm, create100RandomCarsBtn, deleteAllCarsBtn);
-    headerDiv.append(headerControlPanelDiv, headerH1);
+    headerDiv.append(headerControlPanelDiv, headerH1, headerNavPanelDiv);
+    headerNavPanelDiv.append(paginationBackwardBtn, paginationForwardBtn);
     document.body.append(headerDiv);
   }
 
@@ -69,7 +90,7 @@ export class Page {
     if (mainDiv) {
       mainDiv.append(trackArea);
     }
-    this.renderTracks(await dataModel.getCars(1)); // TODO: Сделать механизм, меняющий номера страниц
+    this.renderTracks(await dataModel.getCars(this.garagePage)); // TODO: Сделать механизм, меняющий номера страниц
   }
 
   renderTrack(car: Car) {

@@ -40,8 +40,28 @@ export class Controller {
         carNameInput.value = '';
         carNameInput.focus();
       }
-      page.renderTracks(await dataModel.getCars(1)); // TODO: Заменить на текущий номер страницы
+      page.renderTracks(await dataModel.getCars(page.garagePage));
     });
+  }
+
+  paginateForward(): void {
+    const paginationForwardBtn: HTMLButtonElement | null = document.querySelector('.header-nav-panel__pagination-forward-btn');
+    if (paginationForwardBtn) {
+      paginationForwardBtn.addEventListener('click', async (): Promise<void> => {
+        page.garagePage += 1;
+        page.renderTracks(await dataModel.getCars(page.garagePage));
+      });
+    }
+  }
+
+  paginateBackward(): void {
+    const paginationBackwardBtn: HTMLButtonElement | null = document.querySelector('.header-nav-panel__pagination-backward-btn');
+    if (paginationBackwardBtn) {
+      paginationBackwardBtn.addEventListener('click', async (): Promise<void> => {
+        page.garagePage -= 1;
+        page.renderTracks(await dataModel.getCars(page.garagePage));
+      });
+    }
   }
 
 }
