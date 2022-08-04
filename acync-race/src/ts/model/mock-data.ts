@@ -1,3 +1,4 @@
+import { page } from '../../index';
 import { generateRandomColor, generateRandomName } from '../functions';
 import { Car, Requests } from '../types';
 
@@ -29,6 +30,20 @@ export class Data {
     const response: Response = await fetch(carUrl, { method: Requests.GET });
     const data: Car = await response.json();
     return data;
+  }
+
+  async getCarsTotal(): Promise<number> {
+    const carsOnPage: number = 7;
+    let url = this.garageUrl;
+    url = `${this.garageUrl}?_limit=${carsOnPage}`;
+    const response: Response = await fetch(url, { method: Requests.GET });
+    let carsTotalCount = 0;
+    response.headers.forEach(async (value: string, key: string): Promise<void> => {
+      if (key === 'x-total-count') {
+        carsTotalCount = +value;
+      }
+    });
+    return carsTotalCount;
   }
 
   createCar(name: string, color: string): void { // TODO: Добавить обработку ответа сервера

@@ -1,12 +1,14 @@
-import { dataModel } from "../../index";
+import { dataModel, page } from "../../index";
 import { Car } from "../types";
 
 export class Page {
 
   garagePage: number;
+  carsCount: number;
 
   constructor() {
     this.garagePage = 1;
+    this.carsCount = 0;
   }
 
   renderHeader() {
@@ -59,11 +61,35 @@ export class Page {
     paginationBackwardBtn.setAttribute('type', 'button');
     paginationBackwardBtn.innerText = '⇦';
 
+    const pageNumberP: HTMLParagraphElement = document.createElement('p');
+    pageNumberP.classList.add('header-nav-panel__page-number');
+    pageNumberP.innerText = this.garagePage.toString();
+
+    const carsCountP: HTMLParagraphElement = document.createElement('p');
+    carsCountP.classList.add('header-nav-panel__car-count');
+    carsCountP.innerText = `Total cars: ${this.carsCount.toString()}`;
+    
     headerCreateCarForm.append(carNameInput, carColorInput, createCarBtn);
     headerControlPanelDiv.append(headerCreateCarForm, create100RandomCarsBtn, deleteAllCarsBtn);
-    headerDiv.append(headerControlPanelDiv, headerH1, headerNavPanelDiv);
-    headerNavPanelDiv.append(paginationBackwardBtn, paginationForwardBtn);
+    headerDiv.append(headerControlPanelDiv, headerH1, headerNavPanelDiv, carsCountP);
+    headerNavPanelDiv.append(paginationBackwardBtn, pageNumberP, paginationForwardBtn);
     document.body.append(headerDiv);
+  }
+  
+  refreshPageNumber() {
+    const pageNumberP: HTMLParagraphElement | null = document.querySelector('.header-nav-panel__page-number');
+    if (pageNumberP) {
+      pageNumberP.innerText = this.garagePage.toString();
+    }
+  }
+
+  refreshCarsCount(carsTotal: number) {
+    const carsCountP: HTMLParagraphElement | null = document.querySelector('.header-nav-panel__car-count');
+    page.carsCount = carsTotal;
+    if (carsCountP) {
+      carsCountP.innerText = `Total cars: ${page.carsCount.toString()}`;
+      console.log('Refresh cars count to :', page.carsCount.toString());
+    }
   }
 
   renderMain() {

@@ -8,17 +8,22 @@ export class Controller {
     create100RandomCarsBtn?.addEventListener('click', async (): Promise<void> => {
       dataModel.createRandomCars(100);
       console.log('100 cars was created');
-      page.renderTracks(await dataModel.getCars(1)); // TODO: Заменить на текущий номер страницы
+      page.renderTracks(await dataModel.getCars(page.garagePage));
+      page.refreshCarsCount(await dataModel.getCarsTotal());
     });
   }
   
   deleteAllCarsEvent(): void {
     const deleteAllCarsBtn: HTMLButtonElement | null =
     document.querySelector('.header-control-panel__delete-all-cars-btn');
-    deleteAllCarsBtn?.addEventListener('click', (): void => {
+    deleteAllCarsBtn?.addEventListener('click', async (): Promise<void> => {
       dataModel.deleteAllCars();
       console.log('All cars was deleted');
       page.cleanTrackArea();
+      page.garagePage = 1;
+      page.refreshPageNumber();
+      page.carsCount = 0;
+      page.refreshCarsCount(page.carsCount);
     });
   }
   
@@ -41,6 +46,7 @@ export class Controller {
         carNameInput.focus();
       }
       page.renderTracks(await dataModel.getCars(page.garagePage));
+      page.refreshCarsCount(await dataModel.getCarsTotal());
     });
   }
 
@@ -50,16 +56,20 @@ export class Controller {
       paginationForwardBtn.addEventListener('click', async (): Promise<void> => {
         page.garagePage += 1;
         page.renderTracks(await dataModel.getCars(page.garagePage));
+        page.refreshPageNumber();
       });
     }
   }
-
+  
   paginateBackward(): void {
     const paginationBackwardBtn: HTMLButtonElement | null = document.querySelector('.header-nav-panel__pagination-backward-btn');
     if (paginationBackwardBtn) {
       paginationBackwardBtn.addEventListener('click', async (): Promise<void> => {
-        page.garagePage -= 1;
-        page.renderTracks(await dataModel.getCars(page.garagePage));
+        if (page.garagePage > 1) {
+          page.garagePage -= 1;
+          page.renderTracks(await dataModel.getCars(page.garagePage));
+          page.refreshPageNumber();
+        }
       });
     }
   }
