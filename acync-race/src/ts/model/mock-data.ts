@@ -13,15 +13,15 @@ export class Data {
 
   carCreateHeader = { 'Content-Type': 'application/json' };
 
-  async getCars(pageNumber?: number): Promise<Car[]> {
-    const carsOnPage: number = 7;
+  carsOnPage = 7;
+
+  async getCars(pageNumber?: number, carsOnPage?: number): Promise<Car[]> {
     let url = this.garageUrl;
-    if (pageNumber) {
+    if (pageNumber && carsOnPage) {
       url = `${this.garageUrl}?_page=${pageNumber}&_limit=${carsOnPage}`;
     }
     const response: Response = await fetch(url, { method: Requests.GET });
     const data: Car[] = await response.json();
-    console.log(data);
     return data;
   }
 
@@ -32,8 +32,7 @@ export class Data {
     return data;
   }
 
-  async getCarsTotal(): Promise<number> {
-    const carsOnPage: number = 7;
+  async getCarsTotal(carsOnPage: number): Promise<number> {
     let url = this.garageUrl;
     url = `${this.garageUrl}?_limit=${carsOnPage}`;
     const response: Response = await fetch(url, { method: Requests.GET });
@@ -44,6 +43,12 @@ export class Data {
       }
     });
     return carsTotalCount;
+  }
+
+  async calculateMaxPage(carsCount: number, carsOnPage: number) {
+    const garagePageMax = Math.ceil(carsCount / carsOnPage);
+    console.log('Inside calculate Max Page: ', 'cars Count: ', carsCount, 'carsOnPage: ', carsOnPage, 'garagePageMax: ', garagePageMax);
+    return garagePageMax;
   }
 
   createCar(name: string, color: string): void { // TODO: Добавить обработку ответа сервера

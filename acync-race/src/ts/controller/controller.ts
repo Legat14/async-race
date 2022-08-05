@@ -8,8 +8,13 @@ export class Controller {
     create100RandomCarsBtn?.addEventListener('click', async (): Promise<void> => {
       dataModel.createRandomCars(100);
       console.log('100 cars was created');
-      page.renderTracks(await dataModel.getCars(page.garagePage));
-      page.refreshCarsCount(await dataModel.getCarsTotal());
+      page.renderTracks(await dataModel.getCars(page.garagePage, dataModel.carsOnPage));
+      page.refreshCarsCount(await dataModel.getCarsTotal(dataModel.carsOnPage));
+      const carsCount = await dataModel.getCarsTotal(dataModel.carsOnPage);
+      page.garagePageMax = await dataModel.calculateMaxPage(carsCount, dataModel.carsOnPage);
+      console.log('carsCount: ', carsCount);
+      console.log('CarsOnPage: ', dataModel.carsOnPage);
+      console.log('Garage Page Max: ', page.garagePageMax);
     });
   }
   
@@ -24,6 +29,10 @@ export class Controller {
       page.refreshPageNumber();
       page.carsCount = 0;
       page.refreshCarsCount(page.carsCount);
+      page.garagePageMax = await dataModel.calculateMaxPage(page.carsCount, dataModel.carsOnPage);
+      console.log('carsCount: ', page.carsCount);
+      console.log('CarsOnPage: ', dataModel.carsOnPage);
+      console.log('Garage Page Max: ', page.garagePageMax);
     });
   }
   
@@ -45,8 +54,13 @@ export class Controller {
         carNameInput.value = '';
         carNameInput.focus();
       }
-      page.renderTracks(await dataModel.getCars(page.garagePage));
-      page.refreshCarsCount(await dataModel.getCarsTotal());
+      page.renderTracks(await dataModel.getCars(page.garagePage, dataModel.carsOnPage));
+      const carsCount = await dataModel.getCarsTotal(dataModel.carsOnPage);
+      page.refreshCarsCount(carsCount);
+      page.garagePageMax = await dataModel.calculateMaxPage(carsCount, dataModel.carsOnPage);
+      console.log('carsCount: ', carsCount);
+      console.log('CarsOnPage: ', dataModel.carsOnPage);
+      console.log('Garage Page Max: ', page.garagePageMax);
     });
   }
 
@@ -54,9 +68,11 @@ export class Controller {
     const paginationForwardBtn: HTMLButtonElement | null = document.querySelector('.header-nav-panel__pagination-forward-btn');
     if (paginationForwardBtn) {
       paginationForwardBtn.addEventListener('click', async (): Promise<void> => {
-        page.garagePage += 1;
-        page.renderTracks(await dataModel.getCars(page.garagePage));
-        page.refreshPageNumber();
+        if (page.garagePage < page.garagePageMax) {
+          page.garagePage += 1;
+          page.renderTracks(await dataModel.getCars(page.garagePage, dataModel.carsOnPage));
+          page.refreshPageNumber();
+        }
       });
     }
   }
@@ -67,7 +83,7 @@ export class Controller {
       paginationBackwardBtn.addEventListener('click', async (): Promise<void> => {
         if (page.garagePage > 1) {
           page.garagePage -= 1;
-          page.renderTracks(await dataModel.getCars(page.garagePage));
+          page.renderTracks(await dataModel.getCars(page.garagePage, dataModel.carsOnPage));
           page.refreshPageNumber();
         }
       });

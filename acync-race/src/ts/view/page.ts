@@ -4,14 +4,16 @@ import { Car } from "../types";
 export class Page {
 
   garagePage: number;
+  garagePageMax: number;
   carsCount: number;
 
   constructor() {
     this.garagePage = 1;
+    this.garagePageMax = 1;
     this.carsCount = 0;
   }
 
-  renderHeader() {
+  async renderHeader() {
     const headerDiv: HTMLElement = document.createElement('header');
     headerDiv.classList.add('header');
     const headerH1: HTMLDivElement = document.createElement('h1');
@@ -74,6 +76,8 @@ export class Page {
     headerDiv.append(headerControlPanelDiv, headerH1, headerNavPanelDiv, carsCountP);
     headerNavPanelDiv.append(paginationBackwardBtn, pageNumberP, paginationForwardBtn);
     document.body.append(headerDiv);
+
+    this.refreshCarsCount(await dataModel.getCarsTotal(dataModel.carsOnPage));
   }
   
   refreshPageNumber() {
@@ -116,7 +120,7 @@ export class Page {
     if (mainDiv) {
       mainDiv.append(trackArea);
     }
-    this.renderTracks(await dataModel.getCars(this.garagePage)); // TODO: Сделать механизм, меняющий номера страниц
+    this.renderTracks(await dataModel.getCars(page.garagePage, dataModel.carsOnPage));
   }
 
   renderTrack(car: Car) {
@@ -212,9 +216,11 @@ export class Page {
     document.body.append(footerDiv);
   }
 
-  renderVeiw() {
+   async renderVeiw() {
     this.renderHeader();
     this.renderMain();
     this.renderFooter();
+    const carsCount = await dataModel.getCarsTotal(dataModel.carsOnPage);
+    page.garagePageMax = await dataModel.calculateMaxPage(carsCount, dataModel.carsOnPage);
   }
 }
