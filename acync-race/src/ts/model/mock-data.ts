@@ -93,5 +93,3 @@ export class Data {
     console.log('carUpdate: ', carUpdate);
   }
 }
-
-// TODO: Не вешаются события Update при загрузке страницы, после обновления машины не происходит обновление страницы

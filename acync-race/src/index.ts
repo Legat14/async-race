@@ -18,6 +18,7 @@ async function firstLaunch() {
   controller.paginateForward();
   controller.paginateBackward();
   await controller.updateCarEvent();
+  await controller.deleteCarEvent();
 }
 
 firstLaunch();

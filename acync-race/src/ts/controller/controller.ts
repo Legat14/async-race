@@ -7,15 +7,12 @@ export class Controller {
     document.querySelector('.header-control-panel__create-100-random-cars-btn');
     create100RandomCarsBtn?.addEventListener('click', async (): Promise<void> => {
       dataModel.createRandomCars(100);
-      console.log('100 cars was created');
       page.renderTracks(await dataModel.getCars(page.garagePage, dataModel.carsOnPage));
-      page.refreshCarsCount(await dataModel.getCarsTotal(dataModel.carsOnPage));
       const carsCount = await dataModel.getCarsTotal(dataModel.carsOnPage);
+      page.refreshCarsCount(carsCount);
       page.garagePageMax = await dataModel.calculateMaxPage(carsCount, dataModel.carsOnPage);
-      console.log('carsCount: ', carsCount);
-      console.log('CarsOnPage: ', dataModel.carsOnPage);
-      console.log('Garage Page Max: ', page.garagePageMax);
       await this.updateCarEvent();
+      await this.deleteCarEvent();
     });
   }
   
@@ -63,6 +60,7 @@ export class Controller {
       console.log('CarsOnPage: ', dataModel.carsOnPage);
       console.log('Garage Page Max: ', page.garagePageMax);
       await this.updateCarEvent();
+      await this.deleteCarEvent();
     });
   }
 
@@ -75,6 +73,7 @@ export class Controller {
           page.renderTracks(await dataModel.getCars(page.garagePage, dataModel.carsOnPage));
           page.refreshPageNumber();
           await this.updateCarEvent();
+          await this.deleteCarEvent();
         }
       });
     }
@@ -89,6 +88,7 @@ export class Controller {
           page.renderTracks(await dataModel.getCars(page.garagePage, dataModel.carsOnPage));
           page.refreshPageNumber();
           await this.updateCarEvent();
+          await this.deleteCarEvent();
         }
       });
     }
@@ -96,7 +96,6 @@ export class Controller {
 
   async updateCarEvent(): Promise<void> {
     const allUpdateButtons: NodeListOf<HTMLButtonElement> = document.querySelectorAll('.track-car-controls__car-update-btn');
-    console.log('all update cars buttons ', allUpdateButtons);
     allUpdateButtons.forEach((button: HTMLButtonElement): void => {
       button.addEventListener ('click', async (): Promise<void> => {
       const carNameInput: HTMLInputElement | null =
@@ -109,9 +108,27 @@ export class Controller {
         dataModel.updateCar(+button.dataset.carId, newCarName, newCarColor);
         await page.renderTracks(await dataModel.getCars(page.garagePage, dataModel.carsOnPage));
         await this.updateCarEvent();
+        await this.deleteCarEvent();
       }
       });
     });
+  }
+
+  async deleteCarEvent(): Promise<void> {
+    const allDeleteButtons: NodeListOf<HTMLButtonElement> = document.querySelectorAll('.track-car-controls__car-delete-btn');
+    allDeleteButtons.forEach((button: HTMLButtonElement): void => {
+      button.addEventListener ('click', async (): Promise<void> => {
+        if (button.dataset.carId) {
+          dataModel.deleteCar(+button.dataset.carId);
+          await page.renderTracks(await dataModel.getCars(page.garagePage, dataModel.carsOnPage));
+          const carsCount = await dataModel.getCarsTotal(dataModel.carsOnPage);
+          page.refreshCarsCount(carsCount);
+          page.garagePageMax = await dataModel.calculateMaxPage(carsCount, dataModel.carsOnPage);
+          await this.updateCarEvent();
+          await this.deleteCarEvent();
+        }
+      }
+    )});
   }
 
 }

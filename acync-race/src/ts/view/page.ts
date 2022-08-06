@@ -163,17 +163,24 @@ export class Page {
 
     const carControlsDiv: HTMLDivElement = document.createElement('div');
     carControlsDiv.classList.add('track__car-controls');
+
     const carUpdateBtn: HTMLButtonElement = document.createElement('button');
     carUpdateBtn.setAttribute('type', 'button');
     carUpdateBtn.setAttribute('title', 'Please insert car name and car color on panel above. Then click update car button.');
     carUpdateBtn.classList.add('track-car-controls__car-update-btn');
     carUpdateBtn.innerText = 'Update car';
     carUpdateBtn.dataset.carId = (car.id)?.toString();
-    console.log('Button created width is: ', car.id);
+
+    const carDeleteBtn: HTMLButtonElement = document.createElement('button');
+    carDeleteBtn.setAttribute('type', 'button');
+    carDeleteBtn.classList.add('track-car-controls__car-delete-btn');
+    carDeleteBtn.innerText = 'Delete car';
+    carDeleteBtn.dataset.carId = (car.id)?.toString();
+
 
     carDiv.append(carNameH, carImg);
     track.append(carDiv, carControlsDiv);
-    carControlsDiv.append(carUpdateBtn);
+    carControlsDiv.append(carUpdateBtn, carDeleteBtn);
 
     const trackArea: HTMLElement | null = document.querySelector('.track-area');
     if (trackArea) {
