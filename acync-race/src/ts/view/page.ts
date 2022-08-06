@@ -96,15 +96,15 @@ export class Page {
     }
   }
 
-  renderMain() {
+  async renderMain(): Promise<void> {
     const mainDiv: HTMLElement = document.createElement('main');
     mainDiv.classList.add('main');
     document.body.append(mainDiv);
     this.renderControlPanel();
-    this.renderTrackArea();
+    await this.renderTrackArea();
   }
 
-  renderControlPanel() {
+  renderControlPanel(): void {
     const controlPanel: HTMLElement = document.createElement('aside');
     controlPanel.classList.add('control-panel');
     const mainDiv: HTMLElement | null = document.querySelector('main');
@@ -113,17 +113,17 @@ export class Page {
     }
   }
 
-  async renderTrackArea() {
+  async renderTrackArea(): Promise<void> {
     const trackArea: HTMLElement = document.createElement('div');
     trackArea.classList.add('track-area');
     const mainDiv: HTMLElement | null = document.querySelector('.main');
     if (mainDiv) {
       mainDiv.append(trackArea);
     }
-    this.renderTracks(await dataModel.getCars(page.garagePage, dataModel.carsOnPage));
+    await this.renderTracks(await dataModel.getCars(page.garagePage, dataModel.carsOnPage));
   }
 
-  renderTrack(car: Car) {
+  async renderTrack(car: Car): Promise<void> {
     const track: HTMLDivElement = document.createElement('div');
     track.classList.add('track');
 
@@ -163,9 +163,17 @@ export class Page {
 
     const carControlsDiv: HTMLDivElement = document.createElement('div');
     carControlsDiv.classList.add('track__car-controls');
+    const carUpdateBtn: HTMLButtonElement = document.createElement('button');
+    carUpdateBtn.setAttribute('type', 'button');
+    carUpdateBtn.setAttribute('title', 'Please insert car name and car color on panel above. Then click update car button.');
+    carUpdateBtn.classList.add('track-car-controls__car-update-btn');
+    carUpdateBtn.innerText = 'Update car';
+    carUpdateBtn.dataset.carId = (car.id)?.toString();
+    console.log('Button created width is: ', car.id);
 
     carDiv.append(carNameH, carImg);
     track.append(carDiv, carControlsDiv);
+    carControlsDiv.append(carUpdateBtn);
 
     const trackArea: HTMLElement | null = document.querySelector('.track-area');
     if (trackArea) {
@@ -180,10 +188,10 @@ export class Page {
     });
   }
 
-  renderTracks(carsOnPage: Car[]): void {
+  async renderTracks(carsOnPage: Car[]): Promise<void> {
     this.cleanTrackArea();
-    carsOnPage.forEach((car): void => {
-      this.renderTrack(car);
+    carsOnPage.forEach(async (car): Promise<void> => {
+      await this.renderTrack(car);
     });
   }
 
@@ -218,7 +226,7 @@ export class Page {
 
    async renderVeiw() {
     this.renderHeader();
-    this.renderMain();
+    await this.renderMain();
     this.renderFooter();
     const carsCount = await dataModel.getCarsTotal(dataModel.carsOnPage);
     page.garagePageMax = await dataModel.calculateMaxPage(carsCount, dataModel.carsOnPage);

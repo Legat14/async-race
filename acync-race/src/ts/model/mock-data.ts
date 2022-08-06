@@ -12,6 +12,8 @@ export class Data {
   garageUrl = `${this.serverUrl}${this.garageRes}`;
 
   carCreateHeader = { 'Content-Type': 'application/json' };
+  
+  carUpdateHeader = { 'Content-Type': 'application/json' };
 
   carsOnPage = 7;
 
@@ -79,4 +81,17 @@ export class Data {
       this.deleteCar(car.id as number);
     });
   }
+
+  updateCar(carId: number, name: string, color: string): void { // TODO: Добавить обработку ответа сервера
+    const carUpdate: Car = { name, color };
+    const url = `${this.garageUrl}/${carId}`
+    fetch(url, {
+      method: Requests.PUT,
+      headers: this.carUpdateHeader,
+      body: JSON.stringify(carUpdate),
+    });
+    console.log('carUpdate: ', carUpdate);
+  }
 }
+
+// TODO: Не вешаются события Update при загрузке страницы, после обновления машины не происходит обновление страницы

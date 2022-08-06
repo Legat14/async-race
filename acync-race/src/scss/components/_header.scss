@@ -4,13 +4,17 @@
   width: 100%;
   height: 120px;
   @include flex(row, center, center);
-  background-color: #69f6f9;
+  background-color: #69f6f9;  
+}
 
-  .header__control-panel {
-    @include flex(row, space-between, center);
+.header__control-panel {
+  @include flex(row, space-between, center);
+}
 
-    .header-control-panel__create-car-form {
-      @include flex(column, space-between, center);
-    }
-  }
+.header-control-panel__create-car-form {
+  @include flex(column, space-between, center);
+}
+
+.header__nav-panel {
+  @include flex(row, space-between, center);
 }

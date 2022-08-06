@@ -9,10 +9,15 @@ export const dataModel = new Data();
 export const page = new Page();
 const controller = new Controller();
 
-page.renderVeiw();
+async function firstLaunch() {
+  await page.renderVeiw();
+  
+  controller.create100RandomCarsEvent();
+  controller.deleteAllCarsEvent();
+  controller.createCarEvent();
+  controller.paginateForward();
+  controller.paginateBackward();
+  await controller.updateCarEvent();
+}
 
-controller.create100RandomCarsEvent();
-controller.deleteAllCarsEvent();
-controller.createCarEvent();
-controller.paginateForward();
-controller.paginateBackward();
+firstLaunch();

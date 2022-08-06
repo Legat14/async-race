@@ -25,7 +25,7 @@ export enum Brands {
   NISSAN = '8',
   RENAUT = '9',
   PEUGIOT = '10',
-  MSKVICH = '11',
+  MOSKVICH = '11',
   VOLVO = '12',
   KIA = '13'
 }
@@ -38,7 +38,7 @@ export enum Models {
   BATMOBILE = '4',
   FOKUS = '5',
   GRAVITY = '6',
-  PEASE = '7',
+  PEACE = '7',
   GO = '8',
   MEGA = '9',
   SUPERCAR = '10',

@@ -15,6 +15,7 @@ export class Controller {
       console.log('carsCount: ', carsCount);
       console.log('CarsOnPage: ', dataModel.carsOnPage);
       console.log('Garage Page Max: ', page.garagePageMax);
+      await this.updateCarEvent();
     });
   }
   
@@ -61,6 +62,7 @@ export class Controller {
       console.log('carsCount: ', carsCount);
       console.log('CarsOnPage: ', dataModel.carsOnPage);
       console.log('Garage Page Max: ', page.garagePageMax);
+      await this.updateCarEvent();
     });
   }
 
@@ -72,6 +74,7 @@ export class Controller {
           page.garagePage += 1;
           page.renderTracks(await dataModel.getCars(page.garagePage, dataModel.carsOnPage));
           page.refreshPageNumber();
+          await this.updateCarEvent();
         }
       });
     }
@@ -85,9 +88,30 @@ export class Controller {
           page.garagePage -= 1;
           page.renderTracks(await dataModel.getCars(page.garagePage, dataModel.carsOnPage));
           page.refreshPageNumber();
+          await this.updateCarEvent();
         }
       });
     }
+  }
+
+  async updateCarEvent(): Promise<void> {
+    const allUpdateButtons: NodeListOf<HTMLButtonElement> = document.querySelectorAll('.track-car-controls__car-update-btn');
+    console.log('all update cars buttons ', allUpdateButtons);
+    allUpdateButtons.forEach((button: HTMLButtonElement): void => {
+      button.addEventListener ('click', async (): Promise<void> => {
+      const carNameInput: HTMLInputElement | null =
+      document.querySelector('.create-car-div__car-name-input');
+      const carColorInput: HTMLInputElement | null =
+      document.querySelector('.create-car-div__car-color-input');
+      const newCarName: string | undefined = carNameInput?.value;
+      const newCarColor: string | undefined = carColorInput?.value;
+      if (button.dataset.carId && newCarName && newCarColor) {
+        dataModel.updateCar(+button.dataset.carId, newCarName, newCarColor);
+        await page.renderTracks(await dataModel.getCars(page.garagePage, dataModel.carsOnPage));
+        await this.updateCarEvent();
+      }
+      });
+    });
   }
 
 }
