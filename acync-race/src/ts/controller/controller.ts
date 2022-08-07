@@ -155,15 +155,12 @@ export class Controller {
     const allStopButtons: NodeListOf<HTMLButtonElement> = document.querySelectorAll('.track-car-controls__car-stop-btn');
     allStopButtons.forEach((button: HTMLButtonElement): void => {
       button.addEventListener ('click', async (): Promise<void> => {
-        const goBtn: HTMLButtonElement | null =
-        document.querySelector(`.track-car-controls__car-go-btn[data-car-id="${button.dataset.carId}"]`);
-        if (button.dataset.carId && goBtn) {
+        if (button.dataset.carId) {
           const car: HTMLDivElement | null = document.querySelector(`[data-car-id="${button.dataset.carId}"]`);
           if (car) {
             await this.carStop(car, 'stop');
             await this.carReturn(car);
             this.togleButton(button);
-            this.togleButton(goBtn);
           }
         }
       });
@@ -179,6 +176,13 @@ export class Controller {
       let currentStep: number = 0;
       const oneStepDistance: number = trackDistance / stepsCount;
       let currentPosition: number = +((car.style.left.replace)('px', ''));
+      this.setCarSpeed(car, stepsCount, currentPosition, oneStepDistance, currentStep);
+      this.carBroke(car, await this.getEngineData(car));
+    }
+  }
+
+  async setCarSpeed(car: HTMLDivElement, stepsCount: number, currentPosition: number, oneStepDistance: number, currentStep: number) {
+    if (car.dataset.carId) {
       this.timersArr[+car.dataset.carId] = setInterval((): void => {
         const stopBtn: HTMLButtonElement | null =
         document.querySelector(`.track-car-controls__car-stop-btn[data-car-id="${car.dataset.carId}"]`);
@@ -187,17 +191,16 @@ export class Controller {
             this.togleButton(stopBtn);
           }
         }
-        if (car.dataset.carId) {
-          car.dataset.moveIntervalId = this.timersArr[+car.dataset.carId].toString();
-          currentPosition += oneStepDistance;
-          car.style.left = `${currentPosition}px`;
-          currentStep += 1;
-          if (currentStep + 1 > stepsCount) {
-            clearInterval(this.timersArr[+car.dataset.carId]);
-          }
+      if (car.dataset.carId) {
+        currentPosition += oneStepDistance;
+        car.style.left = `${currentPosition}px`;
+        currentStep += 1;
+        if (currentStep + 1 > stepsCount) {
+          clearInterval(this.timersArr[+car.dataset.carId]);
         }
-      }, this.frameDuration);
-    }
+      }
+    }, this.frameDuration);
+  }
   }
 
   async getTrackLength(): Promise<number> {
@@ -220,6 +223,7 @@ export class Controller {
         status = 'stop';
       }
     }
+    console.log('stop-comand: ', status);
     return status;
   }
 
@@ -239,8 +243,29 @@ export class Controller {
     }
   }
 
+  async carBroke(car: HTMLDivElement, status: string) {
+    if (status === 'stop') {
+      if (car.dataset.carId) {
+        this.timersArr.forEach((timer, index): void => {
+          if (car.dataset.carId) {
+            if (index === +car.dataset.carId) {
+              clearInterval(timer);
+              console.log('timers: ', this.timersArr);
+            }
+          }
+        });
+        await dataModel.getEngine(+car.dataset.carId, 'stopped') as [number, CarAnimation];
+      }
+    }
+  }
+
   async carReturn(car: HTMLDivElement) {
     car.style.left = '0';
+    const goBtn: HTMLButtonElement | null =
+    document.querySelector(`.track-car-controls__car-go-btn[data-car-id="${car.dataset.carId}"]`);
+    if (goBtn) {
+      this.togleButton(goBtn);
+    }
   }
 
   togleButton(button: HTMLButtonElement) {

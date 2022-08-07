@@ -97,13 +97,16 @@ export class Data {
     console.log('carUpdate: ', carUpdate);
   }
 
-  async getEngine(carId: number, carStatus: string): Promise<[number, CarAnimation | CarEngineDrive]> {
+  async getEngine(carId: number, carStatus: string): Promise<[number, CarAnimation | CarEngineDrive | string]> {
     const url: string = `${this.engineUrl}?id=${carId}&status=${carStatus}`;
     const response: Response = await fetch(url, { method: Requests.PATCH });
     const status: number = response.status;
     console.log('Status: ', response.status);
-    const data: CarAnimation = await response.json();
-    console.log('Engine data: ', data);
+    let data: CarAnimation | CarEngineDrive | string = 'stop';
+    if (status === 200) {
+      data = await response.json();
+      console.log('Engine data: ', data);
+    }
     return [status, data];
   }
 
