@@ -13,6 +13,12 @@ export class Controller {
 
   timersArr: NodeJS.Timer[] = [];
 
+  start = 0;
+
+  stop = 0;
+
+  noWinner = false;
+
   create100RandomCarsEvent(): void {
     const create100RandomCarsBtn: HTMLButtonElement | null =
     document.querySelector('.header-control-panel__create-100-random-cars-btn');
@@ -172,7 +178,7 @@ export class Controller {
     });
   }
 
-  async carGo(car: HTMLDivElement): Promise<void> { // TODO: Добавить еще один запрос на сервер перед пуском машины
+  async carGo(car: HTMLDivElement): Promise<void> {
     if (car.dataset.carId) {
       const engineData: [number, CarAnimation] = await dataModel.getEngine(+car.dataset.carId, 'started') as [number, CarAnimation];
       const trackDistance: number = await this.getTrackLength() - this.carWidth - 10;
@@ -202,6 +208,9 @@ export class Controller {
         currentStep += 1;
         if (currentStep + 1 > stepsCount) {
           clearInterval(this.timersArr[+car.dataset.carId]);
+          this.stop = this.stopTimer();
+          this.showWinner(this.start, this.stop, car);
+          this.noWinner = false;
         }
       }
     }, this.frameDuration);
@@ -285,6 +294,8 @@ export class Controller {
     const raceBtn: HTMLButtonElement | null =
     document.querySelector('.header-rece-panel__race-btn');
     raceBtn?.addEventListener('click', async (): Promise<void> => {
+      this.noWinner = true;
+      this.start = this.startTimer();
       const resetRaceBtn: HTMLButtonElement | null =
       document.querySelector('.header-rece-panel__reset-race-btn');
       this.toggleButton(raceBtn);
@@ -311,12 +322,6 @@ export class Controller {
     document.querySelector('.header-rece-panel__reset-race-btn');
     resetRaceBtn?.addEventListener('click', async (): Promise<void> => {
       this.toggleButton(resetRaceBtn);
-      // const allGoButtons: NodeListOf<HTMLButtonElement> = document.querySelectorAll('.track-car-controls__car-go-btn');
-      // allGoButtons.forEach((button: HTMLButtonElement): void => {
-      //   if (!button.disabled) {
-      //     this.toggleButton(button);
-      //   }
-      // });
       const allCars: NodeListOf<HTMLDivElement> = document.querySelectorAll('.track__car-div');
       allCars.forEach(async (car: HTMLDivElement): Promise<void> => {
         page.renderTracks(await dataModel.getCars(page.garagePage, dataModel.carsOnPage));
@@ -326,6 +331,27 @@ export class Controller {
         this.addEventsToButtons();
       });
     });
+  }
+
+  startTimer(): number {
+    const start = new Date().getTime();
+    return start;
+  }
+
+  stopTimer(): number {
+    const stop = new Date().getTime();
+    return stop;
+  }
+
+  async showWinner(start: number, stop: number, car: HTMLDivElement) {
+    console.log('noWinner: ', this.noWinner);
+    if (this.noWinner) {
+      const winnersTime: number = (stop - start) / 1000;
+      if (car.dataset.carId) {
+        const winnersName: string = (await dataModel.getCar(+car.dataset.carId)).name;
+        alert(`The winner is ${winnersName} with time ${winnersTime} sec`);
+      }
+    }
   }
 
   async addEventsToButtons() {
