@@ -1,5 +1,5 @@
 import { dataModel, page } from "../../index";
-import { CarAnimation } from "../types";
+import { CarAnimation, CarEngineDrive } from "../types";
 
 export class Controller {
 
@@ -10,6 +10,8 @@ export class Controller {
   frameDuration = this.millisecsInSec / this.frameFreq;
 
   carWidth = 90;
+
+  timersArr: NodeJS.Timer[] = [];
 
   create100RandomCarsEvent(): void {
     const create100RandomCarsBtn: HTMLButtonElement | null =
@@ -149,21 +151,50 @@ export class Controller {
     });
   }
 
-  async carGo(car: HTMLDivElement): Promise<void> {
+  async carStopEvent(): Promise<void> {
+    const allStopButtons: NodeListOf<HTMLButtonElement> = document.querySelectorAll('.track-car-controls__car-stop-btn');
+    allStopButtons.forEach((button: HTMLButtonElement): void => {
+      button.addEventListener ('click', async (): Promise<void> => {
+        const goBtn: HTMLButtonElement | null =
+        document.querySelector(`.track-car-controls__car-go-btn[data-car-id="${button.dataset.carId}"]`);
+        if (button.dataset.carId && goBtn) {
+          const car: HTMLDivElement | null = document.querySelector(`[data-car-id="${button.dataset.carId}"]`);
+          if (car) {
+            await this.carStop(car, 'stop');
+            await this.carReturn(car);
+            this.togleButton(button);
+            this.togleButton(goBtn);
+          }
+        }
+      });
+    });
+  }
+
+  async carGo(car: HTMLDivElement): Promise<void> { // TODO: Добавить еще один запрос на сервер перед пуском машины
     if (car.dataset.carId) {
-      const engineData: CarAnimation = await dataModel.getEngine(+car.dataset.carId, 'started') as CarAnimation;
+      const engineData: [number, CarAnimation] = await dataModel.getEngine(+car.dataset.carId, 'started') as [number, CarAnimation];
       const trackDistance: number = await this.getTrackLength() - this.carWidth - 10;
-      const timeToFinish: number = engineData.distance / engineData.velocity;
+      const timeToFinish: number = engineData[1].distance / engineData[1].velocity;
       const stepsCount: number = (timeToFinish * this.frameFreq) / this.millisecsInSec;
       let currentStep: number = 0;
       const oneStepDistance: number = trackDistance / stepsCount;
       let currentPosition: number = +((car.style.left.replace)('px', ''));
-      const carMoveInterval = setInterval((): void => {
-        currentPosition += oneStepDistance;
-        car.style.left = `${currentPosition}px`;
-        currentStep += 1;
-        if (currentStep + 1 > stepsCount) {
-          clearInterval(carMoveInterval);
+      this.timersArr[+car.dataset.carId] = setInterval((): void => {
+        const stopBtn: HTMLButtonElement | null =
+        document.querySelector(`.track-car-controls__car-stop-btn[data-car-id="${car.dataset.carId}"]`);
+        if (stopBtn) {
+          if (stopBtn.disabled) {
+            this.togleButton(stopBtn);
+          }
+        }
+        if (car.dataset.carId) {
+          car.dataset.moveIntervalId = this.timersArr[+car.dataset.carId].toString();
+          currentPosition += oneStepDistance;
+          car.style.left = `${currentPosition}px`;
+          currentStep += 1;
+          if (currentStep + 1 > stepsCount) {
+            clearInterval(this.timersArr[+car.dataset.carId]);
+          }
         }
       }, this.frameDuration);
     }
@@ -179,6 +210,39 @@ export class Controller {
     return trackLength;
   }
 
+  async getEngineData(car: HTMLDivElement): Promise<string> {
+    let status: string = 'drive';
+    if (car.dataset.carId) {
+      const engineDriveData: [number, CarEngineDrive] =
+      await dataModel.getEngine(+car.dataset.carId, 'drive') as [number, CarEngineDrive];
+      console.log('engineDrive answer: ', engineDriveData);
+      if (engineDriveData[0] === 500) {
+        status = 'stop';
+      }
+    }
+    return status;
+  }
+
+  async carStop(car: HTMLDivElement, status: string) {
+    if (status === 'stop') {
+      if (car.dataset.carId) {
+        await dataModel.getEngine(+car.dataset.carId, 'stopped') as [number, CarAnimation];
+        this.timersArr.forEach((timer, index): void => {
+          if (car.dataset.carId) {
+            if (index === +car.dataset.carId) {
+              clearInterval(timer);
+              console.log('timers: ', this.timersArr);
+            }
+          }
+        });
+      }
+    }
+  }
+
+  async carReturn(car: HTMLDivElement) {
+    car.style.left = '0';
+  }
+
   togleButton(button: HTMLButtonElement) {
     if (button.disabled) {
       button.removeAttribute('disabled');
@@ -191,6 +255,7 @@ export class Controller {
     await this.updateCarEvent();
     await this.deleteCarEvent();
     await this.carGoEvent();
+    await this.carStopEvent();
   }
 
 }

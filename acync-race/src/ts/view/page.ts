@@ -186,6 +186,7 @@ export class Page {
 
     const carStopBtn: HTMLButtonElement = document.createElement('button');
     carStopBtn.setAttribute('type', 'button');
+    carStopBtn.setAttribute('disabled', '');
     carStopBtn.classList.add('track-car-controls__car-stop-btn');
     carStopBtn.innerText = 'Stop!';
     carStopBtn.dataset.carId = (car.id)?.toString();

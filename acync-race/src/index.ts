@@ -20,6 +20,7 @@ async function firstLaunch() {
   await controller.updateCarEvent();
   await controller.deleteCarEvent();
   await controller.carGoEvent();
+  await controller.carStopEvent();
 }
 
 firstLaunch();
