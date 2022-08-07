@@ -25,7 +25,7 @@ export class Controller {
       this.addEventsToButtons();
     });
   }
-  
+
   deleteAllCarsEvent(): void {
     const deleteAllCarsBtn: HTMLButtonElement | null =
     document.querySelector('.header-control-panel__delete-all-cars-btn');
@@ -274,6 +274,19 @@ export class Controller {
     } else {
       button.setAttribute('disabled', '');
     }
+  }
+
+  async startRaceEvent(): Promise<void> {
+    const raceBtn: HTMLButtonElement | null =
+    document.querySelector('.header-rece-panel__race-btn');
+    raceBtn?.addEventListener('click', async (): Promise<void> => {
+      const allCars: NodeListOf<HTMLDivElement> = document.querySelectorAll('.track__car-div');
+      allCars.forEach((car: HTMLDivElement): void => {
+        if (car.style.left.replace('px', '') === '0' || !car.style.left) {
+          this.carGo(car);
+        }
+      });
+    });
   }
 
   async addEventsToButtons() {

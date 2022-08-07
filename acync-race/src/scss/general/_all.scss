@@ -12,6 +12,7 @@ body {
   width: 100vw;
   height: 100vh;
   @include flex (column, space-between, center);
+  overflow: hidden;
 }
 
 button {

@@ -15,6 +15,14 @@
   @include flex(column, space-between, center);
 }
 
+.header__create-cars-panel {
+  @include flex(column, space-evenly, center);
+}
+
+.header__race-panel {
+  @include flex(column, space-evenly, center);
+}
+
 .header__nav-panel {
   @include flex(row, space-between, center);
 }

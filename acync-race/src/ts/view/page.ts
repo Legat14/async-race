@@ -19,10 +19,10 @@ export class Page {
     const headerH1: HTMLDivElement = document.createElement('h1');
     headerH1.classList.add('header__h1');
     headerH1.innerHTML = 'Async Race';
-    
+
     const headerControlPanelDiv: HTMLDivElement = document.createElement('div');
     headerControlPanelDiv.classList.add('header__control-panel');
-    
+
     const headerCreateCarForm: HTMLFormElement = document.createElement('form');
     headerCreateCarForm.classList.add('header-control-panel__create-car-form');
     const carNameInput: HTMLInputElement = document.createElement('input');
@@ -39,25 +39,28 @@ export class Page {
     createCarBtn.classList.add('create-car-div__create-car-btn');
     createCarBtn.setAttribute('type', 'button');
     createCarBtn.innerText = 'Create a car';
-    
+
+    const headerCreateCarsDiv: HTMLDivElement = document.createElement('div');
+    headerCreateCarsDiv.classList.add('header__create-cars-panel');
+
     const create100RandomCarsBtn: HTMLButtonElement = document.createElement('button');
     create100RandomCarsBtn.classList.add('header-control-panel__create-100-random-cars-btn');
     create100RandomCarsBtn.setAttribute('type', 'button');
     create100RandomCarsBtn.innerText = 'Create 100 cars';
-    
+
     const deleteAllCarsBtn: HTMLButtonElement = document.createElement('button');
     deleteAllCarsBtn.classList.add('header-control-panel__delete-all-cars-btn');
     deleteAllCarsBtn.setAttribute('type', 'button');
     deleteAllCarsBtn.innerText = 'Delete all cars';
-    
+
     const headerNavPanelDiv: HTMLDivElement = document.createElement('div');
     headerNavPanelDiv.classList.add('header__nav-panel');
-    
+
     const paginationForwardBtn: HTMLButtonElement = document.createElement('button');
     paginationForwardBtn.classList.add('header-nav-panel__pagination-forward-btn');
     paginationForwardBtn.setAttribute('type', 'button');
     paginationForwardBtn.innerText = '⇨';
-    
+
     const paginationBackwardBtn: HTMLButtonElement = document.createElement('button');
     paginationBackwardBtn.classList.add('header-nav-panel__pagination-backward-btn');
     paginationBackwardBtn.setAttribute('type', 'button');
@@ -70,16 +73,31 @@ export class Page {
     const carsCountP: HTMLParagraphElement = document.createElement('p');
     carsCountP.classList.add('header-nav-panel__car-count');
     carsCountP.innerText = `Total cars: ${this.carsCount.toString()}`;
-    
+
+    const headerRaceDiv: HTMLDivElement = document.createElement('div');
+    headerRaceDiv.classList.add('header__race-panel');
+
+    const raceBtn: HTMLButtonElement = document.createElement('button');
+    raceBtn.classList.add('header-rece-panel__race-btn');
+    raceBtn.setAttribute('type', 'button');
+    raceBtn.innerText = 'Race!';
+
+    const resetRaceBtn: HTMLButtonElement = document.createElement('button');
+    resetRaceBtn.classList.add('header-rece-panel__reset-race-btn');
+    resetRaceBtn.setAttribute('type', 'button');
+    resetRaceBtn.innerText = 'Cancel race!';
+
+    headerCreateCarsDiv.append(create100RandomCarsBtn, deleteAllCarsBtn);
+    headerRaceDiv.append(raceBtn, resetRaceBtn);
     headerCreateCarForm.append(carNameInput, carColorInput, createCarBtn);
-    headerControlPanelDiv.append(headerCreateCarForm, create100RandomCarsBtn, deleteAllCarsBtn);
-    headerDiv.append(headerControlPanelDiv, headerH1, headerNavPanelDiv, carsCountP);
+    headerControlPanelDiv.append(headerCreateCarForm, headerCreateCarsDiv);
+    headerDiv.append(headerControlPanelDiv, headerH1, headerNavPanelDiv, carsCountP, headerRaceDiv);
     headerNavPanelDiv.append(paginationBackwardBtn, pageNumberP, paginationForwardBtn);
     document.body.append(headerDiv);
 
     this.refreshCarsCount(await dataModel.getCarsTotal(dataModel.carsOnPage));
   }
-  
+
   refreshPageNumber() {
     const pageNumberP: HTMLParagraphElement | null = document.querySelector('.header-nav-panel__page-number');
     if (pageNumberP) {

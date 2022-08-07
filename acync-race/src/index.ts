@@ -21,6 +21,7 @@ async function firstLaunch() {
   await controller.deleteCarEvent();
   await controller.carGoEvent();
   await controller.carStopEvent();
+  await controller.startRaceEvent();
 }
 
 firstLaunch();
