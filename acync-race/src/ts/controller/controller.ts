@@ -162,6 +162,11 @@ export class Controller {
             await this.carReturn(car);
             this.toggleButton(button);
           }
+          const raceBtn: HTMLButtonElement | null =
+          document.querySelector('.header-rece-panel__race-btn');
+          if (raceBtn && raceBtn.disabled) {
+            this.toggleButton(raceBtn);
+          }
         }
       });
     });
@@ -280,7 +285,12 @@ export class Controller {
     const raceBtn: HTMLButtonElement | null =
     document.querySelector('.header-rece-panel__race-btn');
     raceBtn?.addEventListener('click', async (): Promise<void> => {
+      const resetRaceBtn: HTMLButtonElement | null =
+      document.querySelector('.header-rece-panel__reset-race-btn');
       this.toggleButton(raceBtn);
+      if (resetRaceBtn && resetRaceBtn.disabled) {
+        this.toggleButton(resetRaceBtn);
+      }
       const allGoButtons: NodeListOf<HTMLButtonElement> = document.querySelectorAll('.track-car-controls__car-go-btn');
       allGoButtons.forEach((button: HTMLButtonElement): void => {
         if (!button.disabled) {
@@ -292,6 +302,28 @@ export class Controller {
         if (car.style.left.replace('px', '') === '0' || !car.style.left) {
           this.carGo(car);
         }
+      });
+    });
+  }
+
+  async resetRaceEvent(): Promise<void> {
+    const resetRaceBtn: HTMLButtonElement | null =
+    document.querySelector('.header-rece-panel__reset-race-btn');
+    resetRaceBtn?.addEventListener('click', async (): Promise<void> => {
+      this.toggleButton(resetRaceBtn);
+      // const allGoButtons: NodeListOf<HTMLButtonElement> = document.querySelectorAll('.track-car-controls__car-go-btn');
+      // allGoButtons.forEach((button: HTMLButtonElement): void => {
+      //   if (!button.disabled) {
+      //     this.toggleButton(button);
+      //   }
+      // });
+      const allCars: NodeListOf<HTMLDivElement> = document.querySelectorAll('.track__car-div');
+      allCars.forEach(async (car: HTMLDivElement): Promise<void> => {
+        page.renderTracks(await dataModel.getCars(page.garagePage, dataModel.carsOnPage));
+        const carsCount = await dataModel.getCarsTotal(dataModel.carsOnPage);
+        page.refreshCarsCount(carsCount);
+        page.garagePageMax = await dataModel.calculateMaxPage(carsCount, dataModel.carsOnPage);
+        this.addEventsToButtons();
       });
     });
   }

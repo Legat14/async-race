@@ -85,6 +85,7 @@ export class Page {
     const resetRaceBtn: HTMLButtonElement = document.createElement('button');
     resetRaceBtn.classList.add('header-rece-panel__reset-race-btn');
     resetRaceBtn.setAttribute('type', 'button');
+    resetRaceBtn.setAttribute('disabled', '');
     resetRaceBtn.innerText = 'Cancel race!';
 
     headerCreateCarsDiv.append(create100RandomCarsBtn, deleteAllCarsBtn);
