@@ -144,7 +144,7 @@ export class Controller {
           const car: HTMLDivElement | null = document.querySelector(`[data-car-id="${button.dataset.carId}"]`);
           if (car) {
             this.carGo(car);
-            this.togleButton(button);
+            this.toggleButton(button);
           }
         }
       });
@@ -160,7 +160,7 @@ export class Controller {
           if (car) {
             await this.carStop(car, 'stop');
             await this.carReturn(car);
-            this.togleButton(button);
+            this.toggleButton(button);
           }
         }
       });
@@ -188,7 +188,7 @@ export class Controller {
         document.querySelector(`.track-car-controls__car-stop-btn[data-car-id="${car.dataset.carId}"]`);
         if (stopBtn) {
           if (stopBtn.disabled) {
-            this.togleButton(stopBtn);
+            this.toggleButton(stopBtn);
           }
         }
       if (car.dataset.carId) {
@@ -264,11 +264,11 @@ export class Controller {
     const goBtn: HTMLButtonElement | null =
     document.querySelector(`.track-car-controls__car-go-btn[data-car-id="${car.dataset.carId}"]`);
     if (goBtn) {
-      this.togleButton(goBtn);
+      this.toggleButton(goBtn);
     }
   }
 
-  togleButton(button: HTMLButtonElement) {
+  toggleButton(button: HTMLButtonElement) {
     if (button.disabled) {
       button.removeAttribute('disabled');
     } else {
@@ -280,6 +280,13 @@ export class Controller {
     const raceBtn: HTMLButtonElement | null =
     document.querySelector('.header-rece-panel__race-btn');
     raceBtn?.addEventListener('click', async (): Promise<void> => {
+      this.toggleButton(raceBtn);
+      const allGoButtons: NodeListOf<HTMLButtonElement> = document.querySelectorAll('.track-car-controls__car-go-btn');
+      allGoButtons.forEach((button: HTMLButtonElement): void => {
+        if (!button.disabled) {
+          this.toggleButton(button);
+        }
+      });
       const allCars: NodeListOf<HTMLDivElement> = document.querySelectorAll('.track__car-div');
       allCars.forEach((car: HTMLDivElement): void => {
         if (car.style.left.replace('px', '') === '0' || !car.style.left) {
@@ -294,6 +301,10 @@ export class Controller {
     await this.deleteCarEvent();
     await this.carGoEvent();
     await this.carStopEvent();
+    const raceBtn: HTMLButtonElement | null = document.querySelector('.header-rece-panel__race-btn');
+    if (raceBtn && raceBtn.disabled) {
+      this.toggleButton(raceBtn);
+    }
   }
 
 }
