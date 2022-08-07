@@ -1,15 +1,19 @@
-import { page } from '../../index';
 import { generateRandomColor, generateRandomName } from '../functions';
-import { Car, Requests } from '../types';
+import { Car, CarAnimation, CarEngineDrive, Requests } from '../types';
 
 export class Data {
+
   serverUrl = 'http://127.0.0.1:3000';
 
   garageRes = '/garage';
 
   winnersRes = '/winners';
 
+  engineRes = '/engine';
+
   garageUrl = `${this.serverUrl}${this.garageRes}`;
+  
+  engineUrl = `${this.serverUrl}${this.engineRes}`;
 
   carCreateHeader = { 'Content-Type': 'application/json' };
   
@@ -53,7 +57,7 @@ export class Data {
     return garagePageMax;
   }
 
-  createCar(name: string, color: string): void { // TODO: Добавить обработку ответа сервера
+  createCar(name: string, color: string): void {
     const newCar: Car = { name, color };
     fetch(this.garageUrl, {
       method: Requests.POST,
@@ -69,7 +73,7 @@ export class Data {
     }
   }
 
-  deleteCar(carId: number): void { // TODO: Добавить обработку ответа сервера
+  deleteCar(carId: number): void {
     const carUrl = `${this.garageUrl}/${carId}`;
     fetch(carUrl, { method: Requests.DELETE });
     console.log(`Car ${carId} deleted`);
@@ -82,7 +86,7 @@ export class Data {
     });
   }
 
-  updateCar(carId: number, name: string, color: string): void { // TODO: Добавить обработку ответа сервера
+  updateCar(carId: number, name: string, color: string): void {
     const carUpdate: Car = { name, color };
     const url = `${this.garageUrl}/${carId}`
     fetch(url, {
@@ -92,4 +96,13 @@ export class Data {
     });
     console.log('carUpdate: ', carUpdate);
   }
+
+  async getEngine(carId: number, carStatus: string): Promise<CarAnimation | CarEngineDrive> {
+    const url: string = `${this.engineUrl}?id=${carId}&status=${carStatus}`;
+    const response: Response = await fetch(url, { method: Requests.PATCH });
+    const data: CarAnimation = await response.json();
+    console.log('Velocity and distance: ', data);
+    return data;
+  }
+
 }

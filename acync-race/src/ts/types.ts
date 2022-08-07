@@ -13,6 +13,15 @@ export type Car = {
   id?: number
 }
 
+export type CarAnimation = {
+  velocity: number,
+  distance: number
+}
+
+export type CarEngineDrive = {
+  success: boolean
+}
+
 export enum Brands {
   LADA = '0',
   FORD = '1',

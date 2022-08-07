@@ -1,6 +1,15 @@
 import { dataModel, page } from "../../index";
+import { CarAnimation } from "../types";
 
 export class Controller {
+
+  millisecsInSec = 1000;
+
+  frameFreq = 60;
+
+  frameDuration = this.millisecsInSec / this.frameFreq;
+
+  carWidth = 90;
 
   create100RandomCarsEvent(): void {
     const create100RandomCarsBtn: HTMLButtonElement | null =
@@ -11,8 +20,7 @@ export class Controller {
       const carsCount = await dataModel.getCarsTotal(dataModel.carsOnPage);
       page.refreshCarsCount(carsCount);
       page.garagePageMax = await dataModel.calculateMaxPage(carsCount, dataModel.carsOnPage);
-      await this.updateCarEvent();
-      await this.deleteCarEvent();
+      this.addEventsToButtons();
     });
   }
   
@@ -59,8 +67,7 @@ export class Controller {
       console.log('carsCount: ', carsCount);
       console.log('CarsOnPage: ', dataModel.carsOnPage);
       console.log('Garage Page Max: ', page.garagePageMax);
-      await this.updateCarEvent();
-      await this.deleteCarEvent();
+      this.addEventsToButtons();
     });
   }
 
@@ -72,8 +79,7 @@ export class Controller {
           page.garagePage += 1;
           page.renderTracks(await dataModel.getCars(page.garagePage, dataModel.carsOnPage));
           page.refreshPageNumber();
-          await this.updateCarEvent();
-          await this.deleteCarEvent();
+          this.addEventsToButtons();
         }
       });
     }
@@ -87,8 +93,7 @@ export class Controller {
           page.garagePage -= 1;
           page.renderTracks(await dataModel.getCars(page.garagePage, dataModel.carsOnPage));
           page.refreshPageNumber();
-          await this.updateCarEvent();
-          await this.deleteCarEvent();
+          this.addEventsToButtons();
         }
       });
     }
@@ -107,8 +112,7 @@ export class Controller {
       if (button.dataset.carId && newCarName && newCarColor) {
         dataModel.updateCar(+button.dataset.carId, newCarName, newCarColor);
         await page.renderTracks(await dataModel.getCars(page.garagePage, dataModel.carsOnPage));
-        await this.updateCarEvent();
-        await this.deleteCarEvent();
+        this.addEventsToButtons();
       }
       });
     });
@@ -124,11 +128,69 @@ export class Controller {
           const carsCount = await dataModel.getCarsTotal(dataModel.carsOnPage);
           page.refreshCarsCount(carsCount);
           page.garagePageMax = await dataModel.calculateMaxPage(carsCount, dataModel.carsOnPage);
-          await this.updateCarEvent();
-          await this.deleteCarEvent();
+          this.addEventsToButtons();
         }
       }
     )});
+  }
+
+  async carGoEvent(): Promise<void> {
+    const allGoButtons: NodeListOf<HTMLButtonElement> = document.querySelectorAll('.track-car-controls__car-go-btn');
+    allGoButtons.forEach((button: HTMLButtonElement): void => {
+      button.addEventListener ('click', async (): Promise<void> => {
+        if (button.dataset.carId) {
+          const car: HTMLDivElement | null = document.querySelector(`[data-car-id="${button.dataset.carId}"]`);
+          if (car) {
+            this.carGo(car);
+            this.togleButton(button);
+          }
+        }
+      });
+    });
+  }
+
+  async carGo(car: HTMLDivElement): Promise<void> {
+    if (car.dataset.carId) {
+      const engineData: CarAnimation = await dataModel.getEngine(+car.dataset.carId, 'started') as CarAnimation;
+      const trackDistance: number = await this.getTrackLength() - this.carWidth - 10;
+      const timeToFinish: number = engineData.distance / engineData.velocity;
+      const stepsCount: number = (timeToFinish * this.frameFreq) / this.millisecsInSec;
+      let currentStep: number = 0;
+      const oneStepDistance: number = trackDistance / stepsCount;
+      let currentPosition: number = +((car.style.left.replace)('px', ''));
+      const carMoveInterval = setInterval((): void => {
+        currentPosition += oneStepDistance;
+        car.style.left = `${currentPosition}px`;
+        currentStep += 1;
+        if (currentStep + 1 > stepsCount) {
+          clearInterval(carMoveInterval);
+        }
+      }, this.frameDuration);
+    }
+  }
+
+  async getTrackLength(): Promise<number> {
+    const track: HTMLDivElement | null = document.querySelector('.track');
+    let trackLength: number = 0;
+    if (track) {
+      trackLength = +((window.getComputedStyle(track).width).replace('px', ''));
+      console.log(trackLength);
+    }
+    return trackLength;
+  }
+
+  togleButton(button: HTMLButtonElement) {
+    if (button.disabled) {
+      button.removeAttribute('disabled');
+    } else {
+      button.setAttribute('disabled', '');
+    }
+  }
+
+  async addEventsToButtons() {
+    await this.updateCarEvent();
+    await this.deleteCarEvent();
+    await this.carGoEvent();
   }
 
 }

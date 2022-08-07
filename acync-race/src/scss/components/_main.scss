@@ -22,6 +22,7 @@ $side-panel-width: 200px;
 }
 
 .track {
+  position: relative;
   width: 100%;
   height: calc(100% / 7);
   @include flex(row, flex-start, center);
@@ -31,14 +32,15 @@ $side-panel-width: 200px;
 
 .track__car-controls {
   position: relative;
-  left: - $car-width - $side-panel-width;
-  width: 200px;
+  left: - $side-panel-width;
+  width: $side-panel-width;
   height: 100%;
   background-color: #f26fee;
   border: 2px solid #000000;
 }
 
 .track__car-div {
+  position: absolute;
   width: $car-width;
   height: calc(100% - 30px);
   @include flex(column, space-between, center);

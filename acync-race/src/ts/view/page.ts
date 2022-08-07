@@ -129,6 +129,7 @@ export class Page {
 
     const carDiv: HTMLDivElement = document.createElement('div');
     carDiv.classList.add('track__car-div');
+    carDiv.dataset.carId = (car.id)?.toString();
     const carNameH: HTMLParagraphElement = document.createElement('h4');
     carNameH.classList.add('car-div__name');
     carNameH.innerText = car.name;
@@ -177,10 +178,22 @@ export class Page {
     carDeleteBtn.innerText = 'Delete car';
     carDeleteBtn.dataset.carId = (car.id)?.toString();
 
+    const carGoBtn: HTMLButtonElement = document.createElement('button');
+    carGoBtn.setAttribute('type', 'button');
+    carGoBtn.classList.add('track-car-controls__car-go-btn');
+    carGoBtn.innerText = 'Go!';
+    carGoBtn.dataset.carId = (car.id)?.toString();
+
+    const carStopBtn: HTMLButtonElement = document.createElement('button');
+    carStopBtn.setAttribute('type', 'button');
+    carStopBtn.classList.add('track-car-controls__car-stop-btn');
+    carStopBtn.innerText = 'Stop!';
+    carStopBtn.dataset.carId = (car.id)?.toString();
+
 
     carDiv.append(carNameH, carImg);
     track.append(carDiv, carControlsDiv);
-    carControlsDiv.append(carUpdateBtn, carDeleteBtn);
+    carControlsDiv.append(carUpdateBtn, carDeleteBtn, carGoBtn, carStopBtn);
 
     const trackArea: HTMLElement | null = document.querySelector('.track-area');
     if (trackArea) {
