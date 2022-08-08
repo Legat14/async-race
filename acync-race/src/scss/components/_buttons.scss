@@ -1,0 +1,84 @@
+@import "../general/mixines";
+
+button {
+  box-shadow: 3px 3px 6px #000000;
+  color: #ffffff;
+  text-shadow: 1px 1px 2px #000000;
+  cursor: pointer;
+}
+
+button:active {
+  transform: translate(2px, 2px);
+  background: linear-gradient(#e9e961, #f5f5c3, #e9e961);
+}
+
+.header-control-panel__create-100-random-cars-btn,
+.header-control-panel__delete-all-cars-btn,
+.create-car-div__create-car-btn,
+.header-race-panel__race-btn,
+.header-race-panel__reset-race-btn,
+.track-car-controls__car-update-btn,
+.track-car-controls__car-delete-btn,
+.track-car-controls__car-go-btn,
+.track-car-controls__car-stop-btn {
+  @include flex(row, center, center);
+  border: none;
+  border-radius: 5px;
+}
+
+.header-control-panel__create-100-random-cars-btn,
+.header-control-panel__delete-all-cars-btn,
+.create-car-div__create-car-btn,
+.header-race-panel__race-btn,
+.header-race-panel__reset-race-btn {
+  width: 100px;
+  height: 35px;
+  font-size: 14px;
+  @media (max-width: 650px) {
+    width: 75px;
+    font-size: 12px;
+  }
+}
+
+.header-nav-panel__pagination-backward-btn,
+.header-nav-panel__pagination-forward-btn {
+  width: 40px;
+  height: 40px;
+  @include flex(row, center, center);
+  border: none;
+  font-size: 30px;
+  border-radius: 20px;
+}
+
+.track-car-controls__car-update-btn,
+.track-car-controls__car-delete-btn,
+.track-car-controls__car-go-btn,
+.track-car-controls__car-stop-btn {
+  width: 46px;
+  height: 46px;
+  font-size: 14px;
+}
+
+.positive-btn {
+  background: linear-gradient(#629c45, #c3ebb0, #629c45);
+}
+
+.positive-btn:hover {
+  background: linear-gradient(#8f9c45, #c9d777, #8f9c45);
+}
+
+.negative-btn {
+  background: linear-gradient(#9c5645, #c2958a, #9c5645);
+}
+
+.negative-btn:hover {
+  background: linear-gradient(#9c6b45, #cca98f, #9c6b45);
+}
+
+.pagination-btn {
+  background: radial-gradient(#9ec4c7, #a3a3a3);
+}
+
+.pagination-btn:hover {
+  background: linear-gradient(#cae0e2, #d5d5d5);
+}

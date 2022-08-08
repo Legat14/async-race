@@ -37,6 +37,7 @@ export class Page {
     carColorInput.setAttribute('value', '#ffffff');
     const createCarBtn: HTMLButtonElement = document.createElement('button');
     createCarBtn.classList.add('create-car-div__create-car-btn');
+    createCarBtn.classList.add('positive-btn');
     createCarBtn.setAttribute('type', 'button');
     createCarBtn.innerText = 'Create a car';
 
@@ -45,11 +46,13 @@ export class Page {
 
     const create100RandomCarsBtn: HTMLButtonElement = document.createElement('button');
     create100RandomCarsBtn.classList.add('header-control-panel__create-100-random-cars-btn');
+    create100RandomCarsBtn.classList.add('positive-btn');
     create100RandomCarsBtn.setAttribute('type', 'button');
     create100RandomCarsBtn.innerText = 'Create 100 cars';
 
     const deleteAllCarsBtn: HTMLButtonElement = document.createElement('button');
     deleteAllCarsBtn.classList.add('header-control-panel__delete-all-cars-btn');
+    deleteAllCarsBtn.classList.add('negative-btn');
     deleteAllCarsBtn.setAttribute('type', 'button');
     deleteAllCarsBtn.innerText = 'Delete all cars';
 
@@ -58,11 +61,13 @@ export class Page {
 
     const paginationForwardBtn: HTMLButtonElement = document.createElement('button');
     paginationForwardBtn.classList.add('header-nav-panel__pagination-forward-btn');
+    paginationForwardBtn.classList.add('pagination-btn');
     paginationForwardBtn.setAttribute('type', 'button');
     paginationForwardBtn.innerText = '⇨';
 
     const paginationBackwardBtn: HTMLButtonElement = document.createElement('button');
     paginationBackwardBtn.classList.add('header-nav-panel__pagination-backward-btn');
+    paginationBackwardBtn.classList.add('pagination-btn');
     paginationBackwardBtn.setAttribute('type', 'button');
     paginationBackwardBtn.innerText = '⇦';
 
@@ -78,12 +83,14 @@ export class Page {
     headerRaceDiv.classList.add('header__race-panel');
 
     const raceBtn: HTMLButtonElement = document.createElement('button');
-    raceBtn.classList.add('header-rece-panel__race-btn');
+    raceBtn.classList.add('header-race-panel__race-btn');
+    raceBtn.classList.add('positive-btn');
     raceBtn.setAttribute('type', 'button');
     raceBtn.innerText = 'Race!';
 
     const resetRaceBtn: HTMLButtonElement = document.createElement('button');
-    resetRaceBtn.classList.add('header-rece-panel__reset-race-btn');
+    resetRaceBtn.classList.add('header-race-panel__reset-race-btn');
+    resetRaceBtn.classList.add('negative-btn');
     resetRaceBtn.setAttribute('type', 'button');
     resetRaceBtn.setAttribute('disabled', '');
     resetRaceBtn.innerText = 'Cancel race!';
@@ -111,7 +118,6 @@ export class Page {
     page.carsCount = carsTotal;
     if (carsCountP) {
       carsCountP.innerText = `Total cars: ${page.carsCount.toString()}`;
-      console.log('Refresh cars count to :', page.carsCount.toString());
     }
   }
 
@@ -188,18 +194,21 @@ export class Page {
     carUpdateBtn.setAttribute('type', 'button');
     carUpdateBtn.setAttribute('title', 'Please insert car name and car color on panel above. Then click update car button.');
     carUpdateBtn.classList.add('track-car-controls__car-update-btn');
-    carUpdateBtn.innerText = 'Update car';
+    carUpdateBtn.classList.add('positive-btn');
+    carUpdateBtn.innerText = 'Update';
     carUpdateBtn.dataset.carId = (car.id)?.toString();
 
     const carDeleteBtn: HTMLButtonElement = document.createElement('button');
     carDeleteBtn.setAttribute('type', 'button');
     carDeleteBtn.classList.add('track-car-controls__car-delete-btn');
-    carDeleteBtn.innerText = 'Delete car';
+    carDeleteBtn.classList.add('negative-btn');
+    carDeleteBtn.innerText = 'Delete';
     carDeleteBtn.dataset.carId = (car.id)?.toString();
 
     const carGoBtn: HTMLButtonElement = document.createElement('button');
     carGoBtn.setAttribute('type', 'button');
     carGoBtn.classList.add('track-car-controls__car-go-btn');
+    carGoBtn.classList.add('positive-btn');
     carGoBtn.innerText = 'Go!';
     carGoBtn.dataset.carId = (car.id)?.toString();
 
@@ -207,6 +216,7 @@ export class Page {
     carStopBtn.setAttribute('type', 'button');
     carStopBtn.setAttribute('disabled', '');
     carStopBtn.classList.add('track-car-controls__car-stop-btn');
+    carStopBtn.classList.add('negative-btn');
     carStopBtn.innerText = 'Stop!';
     carStopBtn.dataset.carId = (car.id)?.toString();
 

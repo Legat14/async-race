@@ -2,10 +2,17 @@
 
 * {
   box-sizing: border-box;
+  font-family: 'M PLUS Rounded 1c', sans-serif;
 }
 
 a {
+  font-family: 'M PLUS Rounded 1c', sans-serif;
+  font-size: 18px;
   cursor: pointer;
+}
+
+a:hover {
+  transform: scale(105%);
 }
 
 body {
@@ -15,6 +22,7 @@ body {
   overflow: hidden;
 }
 
-button {
-  cursor: pointer;
+p {
+  font-family: 'M PLUS Rounded 1c', sans-serif;
+  font-size: 18px;
 }

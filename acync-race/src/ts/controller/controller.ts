@@ -37,16 +37,12 @@ export class Controller {
     document.querySelector('.header-control-panel__delete-all-cars-btn');
     deleteAllCarsBtn?.addEventListener('click', async (): Promise<void> => {
       dataModel.deleteAllCars();
-      console.log('All cars was deleted');
       page.cleanTrackArea();
       page.garagePage = 1;
       page.refreshPageNumber();
       page.carsCount = 0;
       page.refreshCarsCount(page.carsCount);
       page.garagePageMax = await dataModel.calculateMaxPage(page.carsCount, dataModel.carsOnPage);
-      console.log('carsCount: ', page.carsCount);
-      console.log('CarsOnPage: ', dataModel.carsOnPage);
-      console.log('Garage Page Max: ', page.garagePageMax);
     });
   }
   
@@ -62,7 +58,6 @@ export class Controller {
       const carColor: string | undefined = carColorInput?.value;
       if (carName && carColor) {
         dataModel.createCar(carName, carColor);
-        console.log(`Car ${carName} ${carColor} was created`);
       }
       if (carNameInput) {
         carNameInput.value = '';
@@ -72,9 +67,6 @@ export class Controller {
       const carsCount = await dataModel.getCarsTotal(dataModel.carsOnPage);
       page.refreshCarsCount(carsCount);
       page.garagePageMax = await dataModel.calculateMaxPage(carsCount, dataModel.carsOnPage);
-      console.log('carsCount: ', carsCount);
-      console.log('CarsOnPage: ', dataModel.carsOnPage);
-      console.log('Garage Page Max: ', page.garagePageMax);
       this.addEventsToButtons();
     });
   }
@@ -169,7 +161,7 @@ export class Controller {
             this.toggleButton(button);
           }
           const raceBtn: HTMLButtonElement | null =
-          document.querySelector('.header-rece-panel__race-btn');
+          document.querySelector('.header-race-panel__race-btn');
           if (raceBtn && raceBtn.disabled) {
             this.toggleButton(raceBtn);
           }
@@ -222,7 +214,6 @@ export class Controller {
     let trackLength: number = 0;
     if (track) {
       trackLength = +((window.getComputedStyle(track).width).replace('px', ''));
-      console.log(trackLength);
     }
     return trackLength;
   }
@@ -232,12 +223,10 @@ export class Controller {
     if (car.dataset.carId) {
       const engineDriveData: [number, CarEngineDrive] =
       await dataModel.getEngine(+car.dataset.carId, 'drive') as [number, CarEngineDrive];
-      console.log('engineDrive answer: ', engineDriveData);
       if (engineDriveData[0] === 500) {
         status = 'stop';
       }
     }
-    console.log('stop-comand: ', status);
     return status;
   }
 
@@ -249,7 +238,6 @@ export class Controller {
           if (car.dataset.carId) {
             if (index === +car.dataset.carId) {
               clearInterval(timer);
-              console.log('timers: ', this.timersArr);
             }
           }
         });
@@ -264,7 +252,6 @@ export class Controller {
           if (car.dataset.carId) {
             if (index === +car.dataset.carId) {
               clearInterval(timer);
-              console.log('timers: ', this.timersArr);
             }
           }
         });
@@ -292,12 +279,12 @@ export class Controller {
 
   async startRaceEvent(): Promise<void> {
     const raceBtn: HTMLButtonElement | null =
-    document.querySelector('.header-rece-panel__race-btn');
+    document.querySelector('.header-race-panel__race-btn');
     raceBtn?.addEventListener('click', async (): Promise<void> => {
       this.noWinner = true;
       this.start = this.startTimer();
       const resetRaceBtn: HTMLButtonElement | null =
-      document.querySelector('.header-rece-panel__reset-race-btn');
+      document.querySelector('.header-race-panel__reset-race-btn');
       this.toggleButton(raceBtn);
       if (resetRaceBtn && resetRaceBtn.disabled) {
         this.toggleButton(resetRaceBtn);
@@ -319,7 +306,7 @@ export class Controller {
 
   async resetRaceEvent(): Promise<void> {
     const resetRaceBtn: HTMLButtonElement | null =
-    document.querySelector('.header-rece-panel__reset-race-btn');
+    document.querySelector('.header-race-panel__reset-race-btn');
     resetRaceBtn?.addEventListener('click', async (): Promise<void> => {
       this.toggleButton(resetRaceBtn);
       const allCars: NodeListOf<HTMLDivElement> = document.querySelectorAll('.track__car-div');
@@ -344,7 +331,6 @@ export class Controller {
   }
 
   async showWinner(start: number, stop: number, car: HTMLDivElement) {
-    console.log('noWinner: ', this.noWinner);
     if (this.noWinner) {
       const winnersTime: number = (stop - start) / 1000;
       if (car.dataset.carId) {
@@ -359,7 +345,7 @@ export class Controller {
     await this.deleteCarEvent();
     await this.carGoEvent();
     await this.carStopEvent();
-    const raceBtn: HTMLButtonElement | null = document.querySelector('.header-rece-panel__race-btn');
+    const raceBtn: HTMLButtonElement | null = document.querySelector('.header-race-panel__race-btn');
     if (raceBtn && raceBtn.disabled) {
       this.toggleButton(raceBtn);
     }

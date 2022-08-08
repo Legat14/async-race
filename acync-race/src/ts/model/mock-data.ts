@@ -53,7 +53,6 @@ export class Data {
 
   async calculateMaxPage(carsCount: number, carsOnPage: number) {
     const garagePageMax = Math.ceil(carsCount / carsOnPage);
-    console.log('Inside calculate Max Page: ', 'cars Count: ', carsCount, 'carsOnPage: ', carsOnPage, 'garagePageMax: ', garagePageMax);
     return garagePageMax;
   }
 
@@ -64,7 +63,6 @@ export class Data {
       headers: this.carCreateHeader,
       body: JSON.stringify(newCar),
     });
-    console.log('newCar: ', newCar);
   }
 
   createRandomCars(newCarsQuantity: number) {
@@ -76,7 +74,6 @@ export class Data {
   deleteCar(carId: number): void {
     const carUrl = `${this.garageUrl}/${carId}`;
     fetch(carUrl, { method: Requests.DELETE });
-    console.log(`Car ${carId} deleted`);
   }
 
   async deleteAllCars() {
@@ -94,18 +91,15 @@ export class Data {
       headers: this.carUpdateHeader,
       body: JSON.stringify(carUpdate),
     });
-    console.log('carUpdate: ', carUpdate);
   }
 
   async getEngine(carId: number, carStatus: string): Promise<[number, CarAnimation | CarEngineDrive | string]> {
     const url: string = `${this.engineUrl}?id=${carId}&status=${carStatus}`;
     const response: Response = await fetch(url, { method: Requests.PATCH });
     const status: number = response.status;
-    console.log('Status: ', response.status);
     let data: CarAnimation | CarEngineDrive | string = 'stop';
     if (status === 200) {
       data = await response.json();
-      console.log('Engine data: ', data);
     }
     return [status, data];
   }

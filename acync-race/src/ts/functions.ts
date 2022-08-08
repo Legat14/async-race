@@ -11,12 +11,9 @@ export function generateRandomName(): string {
   const carBrand: string = Object.keys(Brands)[numberOfBrand];
   // TODO: Использую Enum как обычный объект. Если будет время,
   // узнать, как получить название свойства энума, зная его значение и поменять.
-  console.log('carBrand: ', carBrand);
-
   const quantityOfModels: number = Object.keys(Models).length;
   const numberOfModels: number = generateRandomNumber(0, quantityOfModels - 1);
   const carModel: string = Object.keys(Models)[numberOfModels];
-  console.log('carModel: ', carModel);
 
   const carName = `${carBrand} ${carModel}`;
   return carName;
@@ -30,6 +27,5 @@ export function generateRandomColor(): string {
   const blue: number = generateRandomNumber(0, 255);
   const blue16: string = (`0${blue.toString(16)}`).slice(-2);
   const carColor = `#${red16}${green16}${blue16}`;
-  console.log('Car color: ', carColor);
   return carColor;
 }

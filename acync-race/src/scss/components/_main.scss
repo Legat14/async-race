@@ -4,7 +4,8 @@ $car-width: 90px;
 $side-panel-width: 200px;
 
 .main {
-  @include all-width-and-height;
+  width: 100%;
+  height: calc(100vh - 190px);
   @include flex(row, space-between, center);
   flex-grow: 1;
 }
@@ -12,13 +13,13 @@ $side-panel-width: 200px;
 .control-panel {
   width: $side-panel-width;
   height: 100%;
-  background-color: #acae35;
+  background-color: #668f61;
 }
 
 .track-area {
   height: 100%;
   flex-grow: 1;
-  background-color: #43ae35;    
+  background-color: #668f61;    
 }
 
 .track {
@@ -26,8 +27,9 @@ $side-panel-width: 200px;
   width: 100%;
   height: calc(100% / 7);
   @include flex(row, flex-start, center);
-  background-color: #9a9a9a;
-  border: 2px solid #ffffff;
+  background: linear-gradient(#668f61 0%, #668f61 50%, #7f7f7f 50%, #7f7f7f 74%, #ffffff 74%,
+  #ffffff 76%, #7f7f7f 76%, #7f7f7f 100%);
+  border: 2px solid #668f61;
 }
 
 .track__car-controls {
@@ -35,7 +37,9 @@ $side-panel-width: 200px;
   left: - $side-panel-width;
   width: $side-panel-width;
   height: 100%;
-  background-color: #f26fee;
+  @include flex(column, space-evenly, center);
+  flex-wrap: wrap;
+  background: linear-gradient(#969696, #ababab, #969696);
   border: 2px solid #000000;
 }
 
