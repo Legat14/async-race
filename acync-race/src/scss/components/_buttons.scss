@@ -26,6 +26,10 @@ button:active {
   border-radius: 5px;
 }
 
+button:disabled {
+  background: linear-gradient(#a9a9a9, #eaeaea, #a9a9a9);
+}
+
 .header-control-panel__create-100-random-cars-btn,
 .header-control-panel__delete-all-cars-btn,
 .create-car-div__create-car-btn,

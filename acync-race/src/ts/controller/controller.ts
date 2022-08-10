@@ -308,6 +308,9 @@ export class Controller {
     const resetRaceBtn: HTMLButtonElement | null =
     document.querySelector('.header-race-panel__reset-race-btn');
     resetRaceBtn?.addEventListener('click', async (): Promise<void> => {
+      this.timersArr.forEach((timer: NodeJS.Timer) => {
+        clearInterval(timer);
+      });
       this.toggleButton(resetRaceBtn);
       const allCars: NodeListOf<HTMLDivElement> = document.querySelectorAll('.track__car-div');
       allCars.forEach(async (car: HTMLDivElement): Promise<void> => {
