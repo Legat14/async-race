@@ -1,8 +1,9 @@
 import { generateRandomColor, generateRandomName } from '../functions';
-import { Car, CarAnimation, CarEngineDrive, Requests } from '../types';
+import {
+  Car, CarAnimation, CarEngineDrive, Requests,
+} from '../types';
 
 export class Data {
-
   serverUrl = 'http://127.0.0.1:3000';
 
   garageRes = '/garage';
@@ -12,11 +13,11 @@ export class Data {
   engineRes = '/engine';
 
   garageUrl = `${this.serverUrl}${this.garageRes}`;
-  
+
   engineUrl = `${this.serverUrl}${this.engineRes}`;
 
   carCreateHeader = { 'Content-Type': 'application/json' };
-  
+
   carUpdateHeader = { 'Content-Type': 'application/json' };
 
   carsOnPage = 7;
@@ -85,7 +86,7 @@ export class Data {
 
   updateCar(carId: number, name: string, color: string): void {
     const carUpdate: Car = { name, color };
-    const url = `${this.garageUrl}/${carId}`
+    const url = `${this.garageUrl}/${carId}`;
     fetch(url, {
       method: Requests.PUT,
       headers: this.carUpdateHeader,
@@ -93,8 +94,9 @@ export class Data {
     });
   }
 
-  async getEngine(carId: number, carStatus: string): Promise<[number, CarAnimation | CarEngineDrive | string]> {
-    const url: string = `${this.engineUrl}?id=${carId}&status=${carStatus}`;
+  async getEngine(carId: number, carStatus: string):
+  Promise<[number, CarAnimation | CarEngineDrive | string]> {
+    const url = `${this.engineUrl}?id=${carId}&status=${carStatus}`;
     const response: Response = await fetch(url, { method: Requests.PATCH });
     const status: number = response.status;
     let data: CarAnimation | CarEngineDrive | string = 'stop';
@@ -103,5 +105,4 @@ export class Data {
     }
     return [status, data];
   }
-
 }

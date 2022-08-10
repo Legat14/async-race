@@ -1,10 +1,11 @@
-import { dataModel, page } from "../../index";
-import { Car } from "../types";
+import { dataModel, page } from '../../index';
+import { Car } from '../types';
 
 export class Page {
-
   garagePage: number;
+
   garagePageMax: number;
+
   carsCount: number;
 
   constructor() {
@@ -185,7 +186,7 @@ export class Page {
     65.0975 30.35 62.5758 30.35 59.4706C30.35 56.3654 32.8827 53.8327 35.9879
     53.8327C39.0931 53.8327 41.6258 56.3544 41.6258 59.4706C41.6258 62.5758 39.0931
     65.0975 35.9879 65.0975Z" fill="#030104"/>
-    </svg>`
+    </svg>`;
 
     const carControlsDiv: HTMLDivElement = document.createElement('div');
     carControlsDiv.classList.add('track__car-controls');
@@ -220,7 +221,6 @@ export class Page {
     carStopBtn.innerText = 'Stop!';
     carStopBtn.dataset.carId = (car.id)?.toString();
 
-
     carDiv.append(carNameH, carImg);
     track.append(carDiv, carControlsDiv);
     carControlsDiv.append(carUpdateBtn, carDeleteBtn, carGoBtn, carStopBtn);
@@ -230,7 +230,7 @@ export class Page {
       trackArea.append(track);
     }
   }
-  
+
   cleanTrackArea(): void {
     const allTracks: NodeListOf<HTMLDivElement> = document.querySelectorAll('.track');
     allTracks.forEach((track: HTMLDivElement) => {
@@ -274,7 +274,7 @@ export class Page {
     document.body.append(footerDiv);
   }
 
-   async renderVeiw() {
+  async renderVeiw() {
     this.renderHeader();
     await this.renderMain();
     this.renderFooter();

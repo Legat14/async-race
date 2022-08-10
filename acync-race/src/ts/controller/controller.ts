@@ -313,7 +313,7 @@ export class Controller {
       });
       this.toggleButton(resetRaceBtn);
       const allCars: NodeListOf<HTMLDivElement> = document.querySelectorAll('.track__car-div');
-      allCars.forEach(async (car: HTMLDivElement): Promise<void> => {
+      allCars.forEach(async (): Promise<void> => {
         page.renderTracks(await dataModel.getCars(page.garagePage, dataModel.carsOnPage));
         const carsCount = await dataModel.getCarsTotal(dataModel.carsOnPage);
         page.refreshCarsCount(carsCount);
