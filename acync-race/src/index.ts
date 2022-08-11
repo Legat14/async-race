@@ -11,7 +11,7 @@ const controller = new Controller();
 
 async function firstLaunch() {
   await page.renderVeiw();
-  
+
   controller.create100RandomCarsEvent();
   controller.deleteAllCarsEvent();
   controller.createCarEvent();

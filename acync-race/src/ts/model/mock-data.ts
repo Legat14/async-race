@@ -4,21 +4,21 @@ import {
 } from '../types';
 
 export class Data {
-  serverUrl = 'http://127.0.0.1:3000';
+  private serverUrl = 'http://127.0.0.1:3000';
 
-  garageRes = '/garage';
+  private garageRes = '/garage';
 
-  winnersRes = '/winners';
+  private winnersRes = '/winners';
 
-  engineRes = '/engine';
+  private engineRes = '/engine';
 
-  garageUrl = `${this.serverUrl}${this.garageRes}`;
+  private garageUrl = `${this.serverUrl}${this.garageRes}`;
 
-  engineUrl = `${this.serverUrl}${this.engineRes}`;
+  private engineUrl = `${this.serverUrl}${this.engineRes}`;
 
-  carCreateHeader = { 'Content-Type': 'application/json' };
+  private carCreateHeader = { 'Content-Type': 'application/json' };
 
-  carUpdateHeader = { 'Content-Type': 'application/json' };
+  private carUpdateHeader = { 'Content-Type': 'application/json' };
 
   carsOnPage = 7;
 

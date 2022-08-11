@@ -14,7 +14,7 @@ export class Page {
     this.carsCount = 0;
   }
 
-  async renderHeader() {
+  private async renderHeader() {
     const headerDiv: HTMLElement = document.createElement('header');
     headerDiv.classList.add('header');
     const headerH1: HTMLDivElement = document.createElement('h1');
@@ -122,7 +122,7 @@ export class Page {
     }
   }
 
-  async renderMain(): Promise<void> {
+  private async renderMain(): Promise<void> {
     const mainDiv: HTMLElement = document.createElement('main');
     mainDiv.classList.add('main');
     document.body.append(mainDiv);
@@ -130,7 +130,7 @@ export class Page {
     await this.renderTrackArea();
   }
 
-  renderControlPanel(): void {
+  private renderControlPanel(): void {
     const controlPanel: HTMLElement = document.createElement('aside');
     controlPanel.classList.add('control-panel');
     const mainDiv: HTMLElement | null = document.querySelector('main');
@@ -139,7 +139,7 @@ export class Page {
     }
   }
 
-  async renderTrackArea(): Promise<void> {
+  private async renderTrackArea(): Promise<void> {
     const trackArea: HTMLElement = document.createElement('div');
     trackArea.classList.add('track-area');
     const mainDiv: HTMLElement | null = document.querySelector('.main');
@@ -149,7 +149,7 @@ export class Page {
     await this.renderTracks(await dataModel.getCars(page.garagePage, dataModel.carsOnPage));
   }
 
-  async renderTrack(car: Car): Promise<void> {
+  private async renderTrack(car: Car): Promise<void> {
     const track: HTMLDivElement = document.createElement('div');
     track.classList.add('track');
 
@@ -245,7 +245,7 @@ export class Page {
     });
   }
 
-  renderFooter() {
+  private renderFooter() {
     const footerDiv: HTMLElement = document.createElement('footer');
     footerDiv.classList.add('footer');
     const footerRsschoolA: HTMLAnchorElement = document.createElement('a');
